@@ -4,8 +4,7 @@
   "description": "NIAWLOU — Haute Couture à vos mesures (Défi Max It Mini App)",
   "scripts": {
     "dev": "npx serve .",
-    "start": "npx serve .",
-    "build": "echo 'PWA ready'"
+    "start": "npx serve ."
   },
   "keywords": ["maxit", "miniapp", "fashiontech", "pwa", "senegal", "orangemoney"],
   "author": "NIAWLOU Team",

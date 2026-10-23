@@ -1,0 +1,13 @@
+{
+  "name": "niawlou-demo",
+  "version": "1.0.0",
+  "description": "NIAWLOU — Haute Couture à vos mesures (Défi Max It Mini App)",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve .",
+    "build": "echo 'PWA ready'"
+  },
+  "keywords": ["maxit", "miniapp", "fashiontech", "pwa", "senegal", "orangemoney"],
+  "author": "NIAWLOU Team",
+  "license": "MIT"
+}

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>NIAWLOU — Haute Couture Max It</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#103F35"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="NIAWLOU"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+
+  <!-- Google Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS Framework CDN (pour mise en page impeccable) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'primary-dark': '#103F35',
+            'primary-light': '#1A5348',
+            'terracotta': '#9F4F35',
+            'gold-soft': '#E9B65D',
+            'ivory': '#F7F3ED',
+            'ink': '#1A2420'
+          },
+          fontFamily: {
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['Manrope', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <!-- BANDEAU DE CONTRÔLE SUPÉRIEUR (DESKTOP / JURY) -->
+  <header class="jury-header">
+    <div class="brand-section">
+      <span class="brand-title">NIAWLOU</span>
+      <span class="brand-tag">Orange Max It · Mini-App PWA</span>
+    </div>
+
+    <div class="jury-controls">
+      <!-- Switcher Rôles -->
+      <div class="role-switcher">
+        <button class="role-btn active" id="btnRoleClient" data-role="client">
+          <span class="material-symbols-outlined" style="font-size:16px;">person</span>
+          <span>Cliente (Awa Diop)</span>
+        </button>
+        <button class="role-btn" id="btnRoleCouturier" data-role="couturier">
+          <span class="material-symbols-outlined" style="font-size:16px;">storefront</span>
+          <span>Atelier (Maison Aïssatou)</span>
+        </button>
+      </div>
+
+      <!-- Mode Présentation Auto -->
+      <button class="autoplay-btn" id="btnAutoPlay">
+        <span class="material-symbols-outlined" style="font-size:16px;">play_arrow</span>
+        <span>Mode Démo Guidée</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENEUR PRINCIPAL DE DÉMONSTRATION -->
+  <div class="app-container">
+
+    <!-- CADRE IPHONE 15 PRO NATIVE (390x844) -->
+    <div class="phone-mockup">
+      <!-- Dynamic Island Apple -->
+      <div class="dynamic-island">
+        <div class="camera-dot"></div>
+        <div class="mic-dot"></div>
+      </div>
+
+      <!-- iOS Status Bar -->
+      <div class="phone-status-bar">
+        <span id="phoneClock">09:41</span>
+        <div class="status-icons">
+          <span class="material-symbols-outlined" style="font-size:13px;">signal_cellular_4_bar</span>
+          <span class="material-symbols-outlined" style="font-size:13px;">wifi</span>
+          <span class="material-symbols-outlined" style="font-size:13px;">battery_full</span>
+        </div>
+      </div>
+
+      <!-- Phone App Header -->
+      <div class="phone-app-header">
+        <div class="phone-brand-mark">
+          <span class="phone-brand-title">NIAWLOU</span>
+          <span class="phone-brand-subtitle">Atelier Dakar</span>
+        </div>
+        <div class="phone-user-chip" id="userHeaderChip">
+          <img src="assets/img_35.jpg" alt="Awa Diop" class="phone-avatar"/>
+          <span class="phone-user-name" id="userHeaderName">Awa Diop</span>
+        </div>
+      </div>
+
+      <!-- Toast Synchronisation Live -->
+      <div class="sync-toast" id="liveToast">
+        <span class="material-symbols-outlined sync-toast-icon">sync</span>
+        <div class="sync-toast-content">
+          <strong class="sync-toast-title" id="toastTitle">Mise à jour en direct</strong>
+          <p class="sync-toast-desc" id="toastDesc">Le devis a été transmis à la cliente</p>
+        </div>
+        <button class="sync-toast-btn" id="toastActionBtn">Voir</button>
+      </div>
+
+      <!-- Modale Orange Money Sécurisée -->
+      <div class="om-overlay" id="omOverlay">
+        <div class="om-dialog">
+          <div class="om-icon-box">OM</div>
+          <h3 class="om-heading">Orange Money</h3>
+          <p class="om-sub">Règlement pour <strong>Maison Aïssatou</strong><br><span id="omRefBadge" class="text-xs text-gray-500">Réf : NIA-0248</span></p>
+          <div class="om-price-tag" id="omAmountText">15 000 FCFA</div>
+
+          <div class="om-pin-display">
+            <div class="pin-dot filled"></div>
+            <div class="pin-dot filled"></div>
+            <div class="pin-dot filled"></div>
+            <div class="pin-dot filled"></div>
+          </div>
+
+          <div class="om-keypad">
+            <button class="keypad-btn">1</button>
+            <button class="keypad-btn">2</button>
+            <button class="keypad-btn">3</button>
+            <button class="keypad-btn">4</button>
+            <button class="keypad-btn">5</button>
+            <button class="keypad-btn">6</button>
+            <button class="keypad-btn">7</button>
+            <button class="keypad-btn">8</button>
+            <button class="keypad-btn">9</button>
+            <button class="keypad-btn">C</button>
+            <button class="keypad-btn">0</button>
+            <button class="keypad-btn">#</button>
+          </div>
+
+          <button class="om-confirm-btn" id="omPayBtn">Confirmer le paiement</button>
+        </div>
+      </div>
+
+      <!-- VIEWPORT DU CONTENU MOBILE -->
+      <div class="phone-content" id="phoneContent">
+
+        <!-- ========================================== -->
+        <!-- VUE 1 : CLIENT — DÉCOUVRIR (ACCUEIL)       -->
+        <!-- ========================================== -->
+        <div class="page-view active" id="view-decouvrir">
+          <!-- Hero Salutation -->
+          <div class="px-5 pt-4 pb-2">
+            <div class="flex items-center gap-1.5 text-terracotta text-xs font-bold tracking-widest uppercase">
+              <span class="material-symbols-outlined text-[16px]">stars</span>
+              <span>Maison Dakar</span>
+            </div>
+            <h1 class="font-serif text-2xl font-bold text-ink mt-0.5">Bonjour Awa,</h1>
+            <p class="text-xs text-gray-500 italic">Le sur-mesure d'exception, à votre rythme.</p>
+          </div>
+
+          <!-- Hero Création Phare : Robe Nala -->
+          <div class="px-4 my-2">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+              <div class="relative aspect-[4/5] w-full overflow-hidden bg-gray-100">
+                <img src="assets/img_01.jpg" alt="Robe Nala" class="w-full h-full object-cover object-top transition duration-500 hover:scale-105"/>
+                <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                  <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                  <span class="text-[10px] font-bold text-primary-dark tracking-wider uppercase">Almadies, Dakar</span>
+                </div>
+                <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-terracotta shadow-sm">
+                  <span class="material-symbols-outlined text-[18px]">favorite</span>
+                </button>
+                <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/50 to-transparent"></div>
+              </div>
+
+              <div class="p-4">
+                <div class="flex justify-between items-baseline">
+                  <div>
+                    <span class="text-[10px] font-bold tracking-wider text-terracotta uppercase">Création Exclusive</span>
+                    <h2 class="font-serif text-xl font-bold text-primary-dark">Robe Nala</h2>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[9px] uppercase tracking-wider text-gray-400 block">Confection</span>
+                    <span class="font-bold text-emerald-800 text-lg">35 000 FCFA</span>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1.5">
+                  <span class="text-xs font-semibold text-gray-700">Maison Aïssatou</span>
+                  <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                  <span class="text-[11px] text-gray-500">Pièce d'Atelier</span>
+                </div>
+
+                <p class="text-xs text-gray-600 mt-2 leading-relaxed">
+                  Coton texturé émeraude noble & inserts terracotta, broderies fil d'or artisanales.
+                </p>
+
+                <div class="flex flex-wrap gap-1.5 mt-3">
+                  <span class="px-2 py-0.5 rounded bg-amber-50 text-[10px] font-bold text-amber-800">Tissage artisanal</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-50 text-[10px] font-bold text-emerald-800">Coupe évasée à plis</span>
+                  <span class="px-2 py-0.5 rounded bg-orange-50 text-[10px] font-bold text-orange-800">Fil d'or</span>
+                </div>
+
+                <button class="w-full mt-4 bg-primary-dark hover:bg-primary-light text-white py-3 rounded-xl font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.98]" id="btnSelectNala">
+                  <span>Commander à vos mesures</span>
+                  <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Ateliers Partenaires -->
+          <div class="px-5 mt-4 mb-3">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-serif font-bold text-sm text-ink">Ateliers Recommandés</h3>
+              <span class="text-[11px] font-bold text-terracotta">Voir tous (18)</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100">
+              <img src="assets/img_03.jpg" class="w-12 h-12 rounded-lg object-cover" alt="Atelier"/>
+              <div class="flex-1">
+                <h4 class="font-bold text-xs text-ink">Maison Aïssatou</h4>
+                <p class="text-[11px] text-gray-500">Almadies · 4.9 ★ (120 avis)</p>
+              </div>
+              <span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-bold">Vérifié</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VUE 2 : CLIENT — MENSURATIONS & LIVRAISON  -->
+        <!-- ========================================== -->
+        <div class="page-view" id="view-mensurations">
+          <div class="p-4 border-b border-gray-100 flex items-center gap-2">
+            <button class="text-gray-600 hover:text-ink" id="btnBackToDecouvrir">
+              <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+            </button>
+            <h2 class="font-serif font-bold text-base text-ink">Vos Mesures & Réception</h2>
+          </div>
+
+          <div class="p-4">
+            <!-- Profil de Mesures -->
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm mb-4">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-emerald-700 text-[20px]">straighten</span>
+                  <h3 class="font-bold text-xs text-ink uppercase tracking-wider">Carnet de Mesures d'Awa</h3>
+                </div>
+                <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">Validé</span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="bg-gray-50 p-2 rounded-lg">
+                  <span class="text-[10px] text-gray-500 block">Poitrine</span>
+                  <span class="font-bold text-xs text-ink">88 cm</span>
+                </div>
+                <div class="bg-gray-50 p-2 rounded-lg">
+                  <span class="text-[10px] text-gray-500 block">Taille</span>
+                  <span class="font-bold text-xs text-ink">68 cm</span>
+                </div>
+                <div class="bg-gray-50 p-2 rounded-lg">
+                  <span class="text-[10px] text-gray-500 block">Longueur</span>
+                  <span class="font-bold text-xs text-ink">135 cm</span>
+                </div>
+              </div>
+              <p class="text-[10px] text-gray-400 mt-2 italic text-center">Pinces d'aisance et drapé ajustés par l'atelier.</p>
+            </div>
+
+            <!-- Mode de Livraison -->
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm mb-4">
+              <h3 class="font-bold text-xs text-ink uppercase tracking-wider mb-3">Mode de Réception</h3>
+              
+              <label class="flex items-center justify-between p-3 rounded-lg border border-emerald-600 bg-emerald-50/40 cursor-pointer mb-2">
+                <div class="flex items-center gap-2.5">
+                  <input type="radio" name="delivery" checked class="text-emerald-700 focus:ring-0"/>
+                  <div>
+                    <span class="font-bold text-xs text-ink block">Livraison coursier à Mermoz</span>
+                    <span class="text-[10px] text-gray-500">Sous housse textile soignée</span>
+                  </div>
+                </div>
+                <span class="font-bold text-xs text-emerald-800">+1 500 FCFA</span>
+              </label>
+
+              <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 cursor-pointer">
+                <div class="flex items-center gap-2.5">
+                  <input type="radio" name="delivery" class="text-emerald-700 focus:ring-0"/>
+                  <div>
+                    <span class="font-bold text-xs text-ink block">Retrait direct à l'atelier</span>
+                    <span class="text-[10px] text-gray-500">Almadies, Dakar</span>
+                  </div>
+                </div>
+                <span class="font-bold text-xs text-gray-500">Gratuit</span>
+              </label>
+            </div>
+
+            <!-- Récapitulatif Estimatif -->
+            <div class="bg-amber-50/60 p-4 rounded-xl border border-amber-200/60 mb-5">
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-gray-600">Robe Nala (façon)</span>
+                <span class="font-bold text-ink">35 000 FCFA</span>
+              </div>
+              <div class="flex justify-between text-xs mb-2">
+                <span class="text-gray-600">Livraison coursier</span>
+                <span class="font-bold text-ink">1 500 FCFA</span>
+              </div>
+              <div class="border-t border-amber-200/60 pt-2 flex justify-between font-bold text-sm">
+                <span class="text-primary-dark">Total estimatif</span>
+                <span class="text-emerald-800">36 500 FCFA</span>
+              </div>
+              <p class="text-[10px] text-amber-900 mt-2 leading-tight">
+                * Le devis sera officiellement confirmé par l'atelier avant tout paiement d'acompte.
+              </p>
+            </div>
+
+            <button class="w-full bg-primary-dark hover:bg-primary-light text-white py-3.5 rounded-xl font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.98]" id="btnSubmitDemande">
+              <span>Transmettre la demande à l'atelier</span>
+              <span class="material-symbols-outlined text-[16px]">send</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VUE 3 : ATELIER — TABLEAU DE BORD         -->
+        <!-- ========================================== -->
+        <div class="page-view" id="view-atelier-dashboard">
+          <div class="p-4 bg-primary-dark text-white">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase tracking-widest text-gold-soft font-bold">Espace Artisan</span>
+                <h2 class="font-serif text-xl font-bold">Maison Aïssatou</h2>
+              </div>
+              <span class="bg-emerald-900/80 border border-emerald-600 text-gold-soft px-2.5 py-1 rounded-full text-[10px] font-bold">Atelier Vérifié</span>
+            </div>
+
+            <!-- Métriques Clés -->
+            <div class="grid grid-cols-3 gap-2 mt-4 text-center">
+              <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm">
+                <span class="font-bold text-lg text-gold-soft block">3</span>
+                <span class="text-[9px] uppercase tracking-wider text-gray-300">Demandes</span>
+              </div>
+              <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm">
+                <span class="font-bold text-lg text-white block">7</span>
+                <span class="text-[9px] uppercase tracking-wider text-gray-300">En Confection</span>
+              </div>
+              <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm">
+                <span class="font-bold text-lg text-white block">2</span>
+                <span class="text-[9px] uppercase tracking-wider text-gray-300">Livraisons</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <h3 class="font-serif font-bold text-sm text-ink mb-3 flex items-center justify-between">
+              <span>Demande Prioritaire à Chiffrer</span>
+              <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold">Nouveau</span>
+            </h3>
+
+            <!-- Carte Demande Awa Diop NIA-0248 -->
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm mb-4">
+              <div class="flex items-start gap-3">
+                <img src="assets/img_03.jpg" class="w-16 h-20 rounded-lg object-cover" alt="Robe Nala"/>
+                <div class="flex-1">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <span class="text-[10px] font-bold text-terracotta uppercase">Réf : NIA-0248</span>
+                      <h4 class="font-bold text-xs text-ink">Robe Nala (Sur-mesure)</h4>
+                    </div>
+                  </div>
+                  <p class="text-[11px] text-gray-600 mt-1">Cliente : <strong>Awa Diop</strong> (Mermoz)</p>
+                  <p class="text-[10px] text-gray-500">Carnet validé : P 88 · T 68 · L 135 cm</p>
+                  <div class="mt-2 text-xs font-bold text-emerald-800">Date souhaitée : 30 Octobre</div>
+                </div>
+              </div>
+
+              <button class="w-full mt-3 bg-terracotta hover:bg-terracotta/90 text-white py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-[0.98]" id="btnPrepareDevis">
+                <span class="material-symbols-outlined text-[16px]">edit_note</span>
+                <span>Établir et envoyer le devis</span>
+              </button>
+            </div>
+
+            <!-- Commandes en Cours Atelier -->
+            <h3 class="font-serif font-bold text-sm text-ink mb-2">Confections Actives</h3>
+            <div class="bg-white p-3 rounded-xl border border-gray-100 flex items-center justify-between text-xs">
+              <div>
+                <span class="font-bold text-ink block">Boubou Royal Bazin</span>
+                <span class="text-[10px] text-gray-500">Marième Sall · Étape : Finitions</span>
+              </div>
+              <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-[10px] font-bold">En cours</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VUE 4 : CLIENT — DEVIS REÇU & VALIDATION   -->
+        <!-- ========================================== -->
+        <div class="page-view" id="view-devis">
+          <div class="p-4 border-b border-gray-100 flex items-center gap-2">
+            <h2 class="font-serif font-bold text-base text-ink">Devis Officiel Maison Aïssatou</h2>
+          </div>
+
+          <div class="p-4">
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm mb-4">
+              <div class="flex justify-between items-center pb-3 border-b border-gray-100">
+                <div>
+                  <span class="text-[10px] text-gray-400 uppercase">Commande</span>
+                  <h3 class="font-bold text-xs text-ink">NIA-0248</h3>
+                </div>
+                <span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-[10px] font-bold">Devis Validé Atelier</span>
+              </div>
+
+              <!-- Lignes du devis -->
+              <div class="py-3 space-y-2 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Confection Robe Nala (étoffe bazin & fil d'or)</span>
+                  <span class="font-bold text-ink">35 000 FCFA</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Course express sécurisée Mermoz</span>
+                  <span class="font-bold text-ink">1 500 FCFA</span>
+                </div>
+                <div class="border-t border-gray-100 pt-2 flex justify-between font-bold text-sm">
+                  <span class="text-primary-dark">TOTAL DEVIS</span>
+                  <span class="text-emerald-800 text-base">36 500 FCFA</span>
+                </div>
+              </div>
+
+              <!-- Condition Acompte -->
+              <div class="mt-2 bg-emerald-50/70 p-3 rounded-lg border border-emerald-200 text-xs">
+                <div class="flex justify-between items-center">
+                  <span class="font-semibold text-emerald-900">Acompte requis pour démarrer :</span>
+                  <span class="font-bold text-emerald-800 text-sm">15 000 FCFA</span>
+                </div>
+                <span class="text-[10px] text-emerald-700 block mt-1">Solde à payer après réception : 21 500 FCFA</span>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 p-3 rounded-xl text-[11px] text-gray-600 mb-5 leading-normal">
+              <strong>Garantie Max It :</strong> L'acompte est sécurisé par Orange Money. La confection débute immédiatement après confirmation bancaire.
+            </div>
+
+            <button class="w-full bg-emerald-800 hover:bg-emerald-900 text-white py-3.5 rounded-xl font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.98]" id="btnAcceptDevis">
+              <span class="material-symbols-outlined text-[16px]">lock</span>
+              <span>Accepter & Payer l'Acompte (15 000 FCFA)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VUE 5 : CLIENT — SUIVI DE CONFECTION EN DIRECT -->
+        <!-- ========================================== -->
+        <div class="page-view" id="view-suivi">
+          <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+            <h2 class="font-serif font-bold text-base text-ink">Suivi de Confection</h2>
+            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">En Atelier</span>
+          </div>
+
+          <div class="p-4">
+            <!-- Bannière Récap Commande -->
+            <div class="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3 mb-4">
+              <img src="assets/img_01.jpg" class="w-14 h-16 rounded-lg object-cover" alt="Robe Nala"/>
+              <div>
+                <span class="text-[10px] text-terracotta font-bold uppercase">NIA-0248 · Maison Aïssatou</span>
+                <h3 class="font-bold text-xs text-ink">Robe Nala</h3>
+                <p class="text-[11px] text-emerald-700 font-bold">Acompte de 15 000 FCFA validé (Orange Money)</p>
+              </div>
+            </div>
+
+            <!-- Timeline des Jalons de Fabrication -->
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm mb-4">
+              <h3 class="font-serif font-bold text-xs text-ink uppercase tracking-wider mb-4">Avancement du geste d'atelier</h3>
+
+              <div class="space-y-4">
+                <!-- Étape 1 : Coupe -->
+                <div class="flex gap-3">
+                  <div class="flex flex-col items-center">
+                    <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[12px]">✓</span>
+                    <div class="w-0.5 h-10 bg-emerald-600"></div>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-xs text-ink">1. Patronage et coupe du tissu</h4>
+                    <p class="text-[10px] text-gray-500">Calibrage d'après votre carnet de mesures d'octobre.</p>
+                  </div>
+                </div>
+
+                <!-- Étape 2 : Assemblage (En cours avec photo) -->
+                <div class="flex gap-3">
+                  <div class="flex flex-col items-center">
+                    <span class="w-6 h-6 rounded-full bg-terracotta text-white flex items-center justify-center text-[12px] animate-pulse">●</span>
+                    <div class="w-0.5 h-16 bg-gray-200"></div>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h4 class="font-bold text-xs text-terracotta">2. Assemblage du bustier & plissage</h4>
+                      <span class="text-[9px] bg-terracotta/10 text-terracotta px-1.5 py-0.5 rounded font-bold">En cours</span>
+                    </div>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Surpiqûres à la main et structuration des pinces.</p>
+                    
+                    <!-- Photo en direct de l'atelier -->
+                    <div class="flex items-center gap-2 mt-2 p-1.5 bg-gray-50 rounded-lg border border-gray-100">
+                      <img src="assets/img_00.jpg" class="w-10 h-10 rounded object-cover" alt="Bustier"/>
+                      <span class="text-[10px] text-gray-600 italic">Cliché transmis par Maison Aïssatou</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Étape 3 : Finitions -->
+                <div class="flex gap-3">
+                  <div class="flex flex-col items-center">
+                    <span class="w-6 h-6 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-[12px]">3</span>
+                    <div class="w-0.5 h-10 bg-gray-200"></div>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-xs text-gray-400">3. Finitions manuelles et repassage</h4>
+                    <p class="text-[10px] text-gray-400">Pose des boutons de corozo et vapeur douce.</p>
+                  </div>
+                </div>
+
+                <!-- Étape 4 : Livraison -->
+                <div class="flex gap-3">
+                  <div class="flex flex-col items-center">
+                    <span class="w-6 h-6 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-[12px]">4</span>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-xs text-gray-400">4. Remise par coursier à Mermoz</h4>
+                    <p class="text-[10px] text-gray-400">Livraison sous housse textile monogrammée.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bilan Financier -->
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200/70 mb-4">
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-gray-600">Total façon & course</span>
+                <span class="font-bold text-ink">36 500 FCFA</span>
+              </div>
+              <div class="flex justify-between text-xs mb-2 text-emerald-700">
+                <span>Acompte réglé (OM)</span>
+                <span class="font-bold">- 15 000 FCFA</span>
+              </div>
+              <div class="border-t border-gray-200 pt-2 flex justify-between font-bold text-sm">
+                <span class="text-ink">Solde à percevoir</span>
+                <span class="text-terracotta">21 500 FCFA</span>
+              </div>
+            </div>
+
+            <button class="w-full bg-primary-dark hover:bg-primary-light text-white py-3 rounded-xl font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm transition" id="btnSimulateDelivery">
+              <span>Constater la remise & Régler le solde</span>
+              <span class="material-symbols-outlined text-[16px]">local_shipping</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VUE 6 : CLIENT — COMMANDE TERMINÉE & REÇU  -->
+        <!-- ========================================== -->
+        <div class="page-view" id="view-recu">
+          <div class="p-6 text-center">
+            <div class="w-14 h-14 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span class="material-symbols-outlined text-[30px]">verified</span>
+            </div>
+            <h2 class="font-serif font-bold text-xl text-ink">Commande Clôturée</h2>
+            <p class="text-xs text-gray-500 mt-1">Votre vêtement a été remis avec succès.</p>
+
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm text-left mt-5 mb-5">
+              <div class="flex justify-between items-center pb-3 border-b border-gray-100 text-xs">
+                <span class="text-gray-400">Reçu Officiel</span>
+                <span class="font-bold text-emerald-800">PAYÉ INTÉGRALEMENT</span>
+              </div>
+
+              <div class="py-3 space-y-2 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Réf. Commande</span>
+                  <span class="font-bold text-ink">NIA-0248</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Création</span>
+                  <span class="font-bold text-ink">Robe Nala (Sur-mesure)</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Atelier Confection</span>
+                  <span class="font-bold text-ink">Maison Aïssatou</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Acompte vérifié</span>
+                  <span class="font-bold text-ink">15 000 FCFA</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Solde vérifié</span>
+                  <span class="font-bold text-ink">21 500 FCFA</span>
+                </div>
+                <div class="border-t border-gray-100 pt-2 flex justify-between font-bold text-sm text-primary-dark">
+                  <span>TOTAL RÉGLÉ</span>
+                  <span class="text-emerald-800">36 500 FCFA</span>
+                </div>
+              </div>
+
+              <div class="mt-2 text-center border-t border-dashed border-gray-200 pt-3">
+                <span class="text-[10px] text-gray-400 block">ID Transaction : OM-DKR-892491</span>
+                <span class="text-[9px] text-emerald-800 font-bold uppercase mt-0.5 block">Certifié Orange Money · Max It</span>
+              </div>
+            </div>
+
+            <button class="w-full bg-primary-dark text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider" id="btnRestartDemo">
+              Recommencer la démonstration
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM NAVIGATION BAR (APPLE HIG 4 TABS) -->
+      <nav class="phone-tabbar">
+        <a class="tab-item active" id="tabDecouvrir" data-target="view-decouvrir">
+          <span class="material-symbols-outlined">explore</span>
+          <span>Découvrir</span>
+        </a>
+        <a class="tab-item" id="tabCommandes" data-target="view-suivi">
+          <span class="material-symbols-outlined">shopping_bag</span>
+          <span>Commandes</span>
+          <span class="tab-badge" id="orderBadge">1</span>
+        </a>
+        <a class="tab-item" id="tabMessages">
+          <span class="material-symbols-outlined">chat_bubble</span>
+          <span>Messages</span>
+        </a>
+        <a class="tab-item" id="tabProfil">
+          <span class="material-symbols-outlined">person</span>
+          <span>Profil</span>
+        </a>
+      </nav>
+
+      <!-- Home Indicator iOS -->
+      <div class="phone-home-indicator"></div>
+    </div>
+
+    <!-- PANNEAU EXPLICATIF LATÉRAL POUR LE JURY DU CONCOURS (DESKTOP) -->
+    <aside class="jury-sidebar">
+      <div class="sidebar-section-title">
+        <span class="material-symbols-outlined text-gold-soft">military_tech</span>
+        <span>Dossier Jury · Max It Mini App</span>
+      </div>
+      <p class="sidebar-desc">
+        NIAWLOU est la première solution FashionTech sénégalaise intégrant la double expérience synchronisée <strong>Cliente ⇄ Couturier</strong>, avec sécurisation financière complète via Orange Money.
+      </p>
+
+      <!-- Métriques du Cas NIA-0248 -->
+      <div class="jury-kpi-card">
+        <div class="kpi-row">
+          <span class="kpi-label">Commande pilote :</span>
+          <span class="kpi-value">NIA-0248</span>
+        </div>
+        <div class="kpi-row">
+          <span class="kpi-label">Façon Robe Nala :</span>
+          <span class="kpi-value">35 000 FCFA</span>
+        </div>
+        <div class="kpi-row">
+          <span class="kpi-label">Livraison coursier :</span>
+          <span class="kpi-value">1 500 FCFA</span>
+        </div>
+        <div class="kpi-row" style="border-top:1px solid rgba(255,255,255,0.1); padding-top:6px; margin-top:6px;">
+          <span class="kpi-label font-bold text-white">Total garanti :</span>
+          <span class="kpi-value text-base text-gold-soft">36 500 FCFA</span>
+        </div>
+        <div class="kpi-row">
+          <span class="kpi-label">Acompte (40%) :</span>
+          <span class="kpi-value text-emerald-400">15 000 FCFA (OM)</span>
+        </div>
+        <div class="kpi-row">
+          <span class="kpi-label">Solde final :</span>
+          <span class="kpi-value text-terracotta-light">21 500 FCFA</span>
+        </div>
+      </div>
+
+      <!-- Étapes du parcours en direct -->
+      <div class="step-tracker-box">
+        <h4 class="text-xs uppercase font-bold text-gold-soft tracking-wider mb-2">Cycle Transactionnel Idempotent</h4>
+        <div class="step-item done">
+          <div class="step-num">1</div>
+          <span class="step-name">Découverte & Choix de la Robe Nala</span>
+        </div>
+        <div class="step-item done">
+          <div class="step-num">2</div>
+          <span class="step-name">Carnet de mensurations & Course Mermoz</span>
+        </div>
+        <div class="step-item active" id="stepIndicator3">
+          <div class="step-num">3</div>
+          <span class="step-name">Chiffrage officiel par Maison Aïssatou</span>
+        </div>
+        <div class="step-item" id="stepIndicator4">
+          <div class="step-num">4</div>
+          <span class="step-name">Validation devis & Acompte Orange Money</span>
+        </div>
+        <div class="step-item" id="stepIndicator5">
+          <div class="step-num">5</div>
+          <span class="step-name">Confection avec photos en direct</span>
+        </div>
+        <div class="step-item" id="stepIndicator6">
+          <div class="step-num">6</div>
+          <span class="step-name">Remise physique & Solde final</span>
+        </div>
+      </div>
+
+      <!-- Installation PWA -->
+      <button class="btn-pwa-install" id="btnInstallPwa">
+        <span class="material-symbols-outlined">install_mobile</span>
+        <span>Installer en application PWA (Max It)</span>
+      </button>
+    </aside>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

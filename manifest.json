@@ -1,0 +1,25 @@
+{
+  "name": "NIAWLOU — La Couture à vos Mesures",
+  "short_name": "NIAWLOU",
+  "description": "Mini-application FashionTech sénégalaise intégrée à l'écosystème Orange Max It & Orange Money.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F7F3ED",
+  "theme_color": "#103F35",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "shopping"]
+}

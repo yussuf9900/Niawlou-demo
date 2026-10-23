@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+  
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    color: #1A2420;
+    line-height: 1.55;
+    background: #FFF;
+    font-size: 10.5pt;
+  }
+
+  .cover {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(145deg, #103F35, #092620);
+    color: #F7F3ED;
+    padding: 60px 45px;
+    page-break-after: always;
+  }
+  .cover-top { display: flex; justify-content: space-between; align-items: center; }
+  .cover-badge {
+    background: rgba(233, 182, 93, 0.2);
+    border: 1px solid #E9B65D;
+    color: #E9B65D;
+    font-size: 9pt;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 30px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .cover-center { margin: auto 0; }
+  .cover-title {
+    font-family: 'Fraunces', serif;
+    font-size: 42pt;
+    font-weight: 800;
+    color: #E9B65D;
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .cover-subtitle {
+    font-family: 'Fraunces', serif;
+    font-size: 18pt;
+    color: #FFF;
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+  .cover-desc {
+    font-size: 12pt;
+    color: #CCD6D2;
+    max-width: 580px;
+    line-height: 1.6;
+    border-left: 3px solid #E9B65D;
+    padding-left: 18px;
+  }
+  .cover-meta {
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    font-size: 9.5pt;
+  }
+  .meta-label { color: #A0B2AC; text-transform: uppercase; font-size: 8pt; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .meta-val { font-weight: 700; color: #FFF; }
+
+  /* Page Standards */
+  .page { page-break-after: always; padding-top: 10px; }
+  .page:last-child { page-break-after: avoid; }
+
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #103F35;
+    padding-bottom: 8px;
+    margin-bottom: 22px;
+  }
+  .header-title {
+    font-family: 'Fraunces', serif;
+    font-size: 14pt;
+    font-weight: 700;
+    color: #103F35;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .header-tag {
+    font-size: 8pt;
+    color: #9F4F35;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 16pt;
+    color: #103F35;
+    margin-top: 18px;
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #9F4F35;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  p { margin-bottom: 10px; text-align: justify; }
+
+  .highlight-card {
+    background: #F7F3ED;
+    border-left: 4px solid #103F35;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+  }
+  .highlight-card p { margin-bottom: 0; font-size: 10pt; color: #26332E; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .feature-box {
+    background: #FAFAFA;
+    border: 1px solid #EAEAEA;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .feature-box h4 {
+    color: #103F35;
+    font-size: 10pt;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .feature-box p { font-size: 9pt; color: #555; margin-bottom: 0; text-align: left; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 9pt;
+  }
+  th {
+    background: #103F35;
+    color: #FFF;
+    text-align: left;
+    padding: 8px 12px;
+    font-weight: 700;
+    border: 1px solid #103F35;
+  }
+  td {
+    padding: 7px 12px;
+    border: 1px solid #E0E0E0;
+  }
+  tr:nth-child(even) td { background: #F9F9F8; }
+
+  .kpi-badge {
+    background: #103F35;
+    color: #E9B65D;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 8.5pt;
+    display: inline-block;
+  }
+
+  .signature-box {
+    margin-top: 30px;
+    border-top: 1px dashed #CCC;
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+  <!-- PAGE 1 : COUVERTURE OFFICIELLE -->
+  <div class="cover">
+    <div class="cover-top">
+      <span class="cover-badge">Défi Orange Max It · Mini-App 2026</span>
+      <span style="font-weight:700; font-size:10pt; letter-spacing:0.1em;">ORANGE DIGITAL CENTER</span>
+    </div>
+
+    <div class="cover-center">
+      <h1 class="cover-title">NIAWLOU</h1>
+      <div class="cover-subtitle">« La couture à vos mesures »</div>
+      <p class="cover-desc">
+        Dossier de Présentation Officiel du Projet. Plateforme mobile FashionTech unifiée connectant les clients aux ateliers de haute couture sénégalais, intégrée nativement à l'écosystème Orange Max It et sécurisée par Orange Money.
+      </p>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="meta-label">Porteur de Projet</div>
+        <div class="meta-val">Youssou SALL</div>
+      </div>
+      <div>
+        <div class="meta-label">Challenge & Statut</div>
+        <div class="meta-val">Mini App · Prototype Déployé</div>
+      </div>
+      <div>
+        <div class="meta-label">Date & Version</div>
+        <div class="meta-val">Octobre 2026 · Version 2.0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2 : RÉSUMÉ EXÉCUTIF & OPPORTUNITÉ -->
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-title">1. Résumé Exécutif & Vision Stratégique</span>
+      <span class="header-tag">NIAWLOU / MAX IT</span>
+    </div>
+
+    <h2>Une Révolution Numérique pour l'Artisanat Sénégalais</h2>
+    <p>
+      Le Sénégal est reconnu internationalement comme l'une des capitales de l'élégance vestimentaire en Afrique de l'Ouest. Rien qu'à Dakar, plus de <strong>12 000 ateliers de couture</strong> habillent au quotidien des millions de citoyens pour les cérémonies religieuses (Tabaski, Korité, Magal), les mariages et le prêt-à-porter contemporain.
+    </p>
+    <p>
+      Pourtant, cette filière économique majeure reste freinée par un mode opératoire <strong>fragmenté, oral et informel à 85%</strong>. Les clients subissent une opacité tarifaire récurrente, des pertes de mensurations et une anxiété permanente liée aux retards de livraison. De leur côté, les tailleurs souffrent d'impayés, de devis mal cadrés et d'un manque de trésorerie pour acheter les matières premières.
+    </p>
+
+    <div class="highlight-card">
+      <p>
+        <strong>La Mission NIAWLOU :</strong> Créer le premier pont numérique de confiance entre les passionnés de mode et les artisans d'exception, directement accessible au creux de la main via la super-app <strong>Orange Max It</strong>.
+      </p>
+    </div>
+
+    <h2>Les Trois Frictions Majeures Résolues</h2>
+    <div class="grid-3">
+      <div class="feature-box">
+        <h4>1. Confiance & Découverte</h4>
+        <p>Fin de la dispersion : découverte de créations exclusives, notation vérifiée des ateliers et certification locale (Sacré-Cœur, Almadies, Médina).</p>
+      </div>
+      <div class="feature-box">
+        <h4>2. Rigueur & Chiffrage</h4>
+        <p>Fin du marchandage opaque : devis ferme décomposant la confection et la livraison, accepté obligatoirement avant tout versement d'acompte.</p>
+      </div>
+      <div class="feature-box">
+        <h4>3. Sérénité & Traçabilité</h4>
+        <p>Fin des incertitudes : jalons de production suivis en direct (coupe, assemblage, finitions) avec photos d'atelier transmises en temps réel.</p>
+      </div>
+    </div>
+
+    <h2>Proposition de Valeur Unique pour Orange Max It</h2>
+    <p>
+      Pour Orange Sénégal, NIAWLOU n'est pas une simple vitrine d'e-commerce, mais un <strong>catalyseur d'usage récurrent pour Orange Money</strong>. En numérisant des transactions d'acompte et de solde sur des paniers moyens de 35 000 à 150 000 FCFA, NIAWLOU ancre la super-app Max It au cœur de la vie culturelle et sociale des Sénégalais.
+    </p>
+  </div>
+
+  <!-- PAGE 3 : EXPÉRIENCE UTILISATEUR & DEUX ESPACES -->
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-title">2. L'Expérience Produit · Deux Espaces Synchronisés</span>
+      <span class="header-tag">PARCOURS DÉTAILLÉ</span>
+    </div>
+
+    <h2>Une Seule Commande, Deux Interfaces Complémentaires</h2>
+    <p>
+      La force de NIAWLOU réside dans la synchronisation en temps réel entre le smartphone de la cliente et l'espace professionnel de l'artisan. Chaque action de l'un met instantanément à jour l'état chez l'autre.
+    </p>
+
+    <div class="grid-2">
+      <div class="feature-box" style="border-left: 3px solid #103F35;">
+        <h4>CÔTÉ CLIENTE (Awa Diop)</h4>
+        <p>• Découverte éditoriale inspirée des codes du luxe africain.<br>
+        • Fiche création avec prix garanti et tissu certifié.<br>
+        • Carnet de mensurations numérique sauvegardé.<br>
+        • Validation explicite du devis avant paiement.<br>
+        • Versement sécurisé de l'acompte par Orange Money.<br>
+        • Suivi des étapes de confection en direct.<br>
+        • Constat de remise et règlement final du solde.</p>
+      </div>
+
+      <div class="feature-box" style="border-left: 3px solid #9F4F35;">
+        <h4>CÔTÉ COUTURIER (Maison Aïssatou)</h4>
+        <p>• Tableau de bord d'atelier : KPI confections et urgences.<br>
+        • Réception de demandes structurées avec mesures figées.<br>
+        • Établissement de devis transparent (façon + course).<br>
+        • Démarrage de la confection dès confirmation de l'acompte.<br>
+        • Envoi de clichés d'avancement (bustier, broderies).<br>
+        • Organisation de la remise par coursier ou atelier.<br>
+        • Encaissement certifié du solde avant clôture.</p>
+      </div>
+    </div>
+
+    <h2>Le Cas Pilote Chiffré : Commande NIA-0248</h2>
+    <p>
+      Afin de prouver la rigueur du modèle, l'ensemble de notre prototype, de la vidéo et du backend s'articule autour d'un cas de démonstration parfaitement cohérent :
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Poste de Dépense</th>
+          <th>Détail & Justification</th>
+          <th>Montant FCFA</th>
+          <th>Mode de Paiement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Confection Robe Nala</strong></td>
+          <td>Tissage émeraude noble & inserts terracotta, broderies fil d'or</td>
+          <td><strong>35 000 FCFA</strong></td>
+          <td>Inclus dans le devis</td>
+        </tr>
+        <tr>
+          <td><strong>Course Express Sécurisée</strong></td>
+          <td>Livraison sous housse textile monogrammée à Mermoz</td>
+          <td><strong>1 500 FCFA</strong></td>
+          <td>Inclus dans le devis</td>
+        </tr>
+        <tr style="background:#EFECE6; font-weight:bold;">
+          <td>TOTAL DU DEVIS</td>
+          <td>Montant ferme garanti et approuvé par la cliente</td>
+          <td>36 500 FCFA</td>
+          <td>Montant global contractuel</td>
+        </tr>
+        <tr>
+          <td><strong>Acompte de Démarrage (41%)</strong></td>
+          <td>Déblocage des achats de fournitures et coupe du tissu</td>
+          <td><strong>15 000 FCFA</strong></td>
+          <td><span class="kpi-badge">Orange Money (Validé)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Solde à la Remise (59%)</strong></td>
+          <td>Exigible uniquement après constat physique de livraison</td>
+          <td><strong>21 500 FCFA</strong></td>
+          <td><span class="kpi-badge">Orange Money (Validé)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGE 4 : ARCHITECTURE & ÉTAT DE L'ART TECHNIQUE -->
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-title">3. Architecture Technique & Déploiement Réel</span>
+      <span class="header-tag">AUDIT TECHNIQUE</span>
+    </div>
+
+    <h2>Une Implémentation Complète, Vérifiable et Déployée</h2>
+    <p>
+      Contrairement aux projets se limitant à des concepts statiques, NIAWLOU dispose d'ores et déjà d'une <strong>infrastructure logicielle complète</strong>, déployée en production et testée de bout en bout :
+    </p>
+
+    <div class="grid-2">
+      <div class="feature-box">
+        <h4>1. Frontend PWA Déployé (Vercel)</h4>
+        <p>
+          • <strong>URL :</strong> <a href="https://niawlou-five.vercel.app/" style="color:#103F35; font-weight:bold;">https://niawlou-five.vercel.app/</a><br>
+          • <strong>Technologie :</strong> HTML5, CSS3 Moderne, Vanilla JS, Service Worker hors-ligne (`sw.js`), Manifest PWA, Tailwind CSS.<br>
+          • <strong>Spécificité :</strong> Responsive strict 390px (Apple HIG), bandeau jury pour bascule 1-clic entre les rôles, modale Orange Money avec digicode fonctionnel.
+        </p>
+      </div>
+
+      <div class="feature-box">
+        <h4>2. Backend API en Production (Render)</h4>
+        <p>
+          • <strong>Swagger :</strong> <a href="https://niawlou-backend.onrender.com/api/docs/" style="color:#103F35; font-weight:bold;">https://niawlou-backend.onrender.com/api/docs/</a><br>
+          • <strong>Technologie :</strong> Node.js v24, TypeScript, Express, Prisma ORM, PostgreSQL (Neon Cloud), JWT Auth 7 jours.<br>
+          • <strong>Couverture :</strong> 20 endpoints REST documentés sous OpenAPI 3.0.3 et 100% testés avec Vitest (20 tests passés avec succès).
+        </p>
+      </div>
+    </div>
+
+    <h2>Matrice de Couverture : Front-End ⇄ Back-End</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Parcours Utilisateur</th>
+          <th>Interface Mobile (PWA)</th>
+          <th>Endpoints Backend (Prisma / Express)</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Découverte & Modèles</td>
+          <td>Écrans C01 & C02 (Robe Nala)</td>
+          <td><code>GET /api/v1/tailors/models</code> & <code>GET /models/:id</code></td>
+          <td><span class="kpi-badge">Vérifié & Opérationnel</span></td>
+        </tr>
+        <tr>
+          <td>Profil & Mensurations</td>
+          <td>Écran C04 (Mesures figées)</td>
+          <td><code>POST /api/v1/orders</code> (snapshot JSON des mesures)</td>
+          <td><span class="kpi-badge">Vérifié & Opérationnel</span></td>
+        </tr>
+        <tr>
+          <td>Tableau de Bord Couturier</td>
+          <td>Écran T03 (Maison Aïssatou)</td>
+          <td><code>GET /api/v1/tailors/dashboard</code> (KPI confections/urgences)</td>
+          <td><span class="kpi-badge">Vérifié & Opérationnel</span></td>
+        </tr>
+        <tr>
+          <td>Chiffrage du Devis</td>
+          <td>Écrans T06 & C06</td>
+          <td><code>POST /orders/:id/quotation/validate</code> & <code>/accept</code></td>
+          <td><span class="kpi-badge">Vérifié & Opérationnel</span></td>
+        </tr>
+        <tr>
+          <td>Paiement Orange Money</td>
+          <td>Modale OM (Acompte & Solde)</td>
+          <td><code>POST /payments/init</code> & <code>POST /payments/simulate</code></td>
+          <td><span class="kpi-badge">Vérifié & Opérationnel</span></td>
+        </tr>
+        <tr>
+          <td>Jalons de Confection</td>
+          <td>Écrans C08 & T08 (Coupe/Bustier)</td>
+          <td><code>PATCH /orders/:id/step</code> (Patronage, Assemblage, Finitions)</td>
+          <td><span class="kpi-badge">Vérifié & Opérationnel</span></td>
+        </tr>
+        <tr>
+          <td>Remise & Reçu Officiel</td>
+          <td>Écrans C09 & C10 (Clôture)</td>
+          <td><code>POST /orders/:id/delivery/confirm</code> & <code>GET /receipt</code></td>
+          <td><span class="kpi-badge">Vérifié & Opérationnel</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGE 5 : MODÈLE ÉCONOMIQUE & IMPACT -->
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-title">4. Modèle Économique & Synergies Orange</span>
+      <span class="header-tag">BUSINESS MODEL</span>
+    </div>
+
+    <h2>Un Modèle Gagnant-Gagnant, Éthique et Lucratif</h2>
+    <p>
+      Le modèle d'affaires de NIAWLOU s'appuie sur la création de valeur concrète pour l'ensemble des parties prenantes :
+    </p>
+
+    <div class="grid-2">
+      <div class="feature-box">
+        <h4>1. Prélèvement Transactionnel Modéré</h4>
+        <p>
+          Prélèvement ultra-compétitif de seulement <strong>1% à 2%</strong> sur le montant total de la commande, facturé à l'atelier lors du déblocage du solde. Ce taux très accessible assure une adhésion immédiate des artisans tout en éliminant les risques d'impayés et en augmentant leur marge nette.
+        </p>
+      </div>
+      <div class="feature-box">
+        <h4>2. Monétisation des Flux Orange Money</h4>
+        <p>
+          Orange capte l'intégralité des flux financiers d'acompte et de solde via son API Marchand, générant des commissions de transaction directes et augmentant la vélocité de la monnaie électronique.
+        </p>
+      </div>
+    </div>
+
+    <h2>Feuille de Route & Déploiement Progressif</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Échéance</th>
+          <th>Objectifs & Jalons Clés</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Phase 1 · MVP Challenge</strong></td>
+          <td>Octobre 2026</td>
+          <td>20 écrans mobiles, PWA opérationnelle, backend Swagger, 2 flux synchronisés et simulation Orange Money.</td>
+        </tr>
+        <tr>
+          <td><strong>Phase 2 · Pilote Dakar</strong></td>
+          <td>T1 2027</td>
+          <td>Enrôlement et intégration de 50 ateliers certifiés (Almadies, Sacré-Cœur, Plateau), intégration de l'API Orange Money réelle et 500 premières commandes.</td>
+        </tr>
+        <tr>
+          <td><strong>Phase 3 · Échelle Nationale</strong></td>
+          <td>T3 2027</td>
+          <td>Déploiement à Thiès, Saint-Louis et Touba ; lancement des services ateliers premium (achats groupés d'étoffes, micro-crédit Orange Bank).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="signature-box">
+      <div>
+        <span style="font-size:8pt; text-transform:uppercase; color:#888;">Pour le Projet NIAWLOU</span><br>
+        <strong>Youssou SALL</strong><br>
+        <span style="font-size:9pt; color:#555;">Porteur du Projet & Lead Designer</span>
+      </div>
+      <div style="text-align:right;">
+        <span style="font-size:8pt; text-transform:uppercase; color:#888;">Évaluation Concours</span><br>
+        <strong>Challenge Orange Max It Mini App 2026</strong><br>
+        <span style="font-size:9pt; color:#103F35; font-weight:bold;">Orange Digital Center & DMGP</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

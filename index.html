@@ -7,9 +7,9 @@
   
   <!-- PWA Meta Tags -->
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#103F35"/>
+  <meta name="theme-color" content="#FCF9F4" id="themeColorMeta"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
   <meta name="apple-mobile-web-app-title" content="NIAWLOU"/>
   <link rel="apple-touch-icon" href="icons/icon-192.png"/>
 
@@ -47,7 +47,7 @@
 </head>
 <body>
 
-  <!-- BANDEAU DE CONTRÔLE SUPÉRIEUR (DESKTOP / JURY) -->
+  <!-- BANDEAU DE CONTRÔLE SUPÉRIEUR (DESKTOP / JURY SEULEMENT) -->
   <header class="jury-header">
     <div class="brand-section">
       <span class="brand-title">NIAWLOU</span>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="jury-controls">
-      <!-- Switcher Rôles -->
+      <!-- Switcher Rôles Desktop -->
       <div class="role-switcher">
         <button class="role-btn active" id="btnRoleClient" data-role="client">
           <span class="material-symbols-outlined" style="font-size:16px;">person</span>
@@ -78,16 +78,16 @@
   <!-- CONTENEUR PRINCIPAL DE DÉMONSTRATION -->
   <div class="app-container">
 
-    <!-- CADRE IPHONE 15 PRO NATIVE (390x844) -->
+    <!-- CADRE IPHONE 15 PRO NATIVE (390x844 sur Desktop, 100% Plein Écran sur Mobile) -->
     <div class="phone-mockup">
-      <!-- Dynamic Island Apple -->
-      <div class="dynamic-island">
+      <!-- Dynamic Island Apple (Desktop Only) -->
+      <div class="dynamic-island desktop-only-island">
         <div class="camera-dot"></div>
         <div class="mic-dot"></div>
       </div>
 
-      <!-- iOS Status Bar -->
-      <div class="phone-status-bar">
+      <!-- iOS Status Bar (Desktop Mockup Only) -->
+      <div class="phone-status-bar desktop-only-status">
         <span id="phoneClock">09:41</span>
         <div class="status-icons">
           <span class="material-symbols-outlined" style="font-size:13px;">signal_cellular_4_bar</span>
@@ -96,16 +96,31 @@
         </div>
       </div>
 
-      <!-- Phone App Header -->
+      <!-- VRAI HEADER D'APPLICATION (Fixe & Authentique Mobile/PWA) -->
       <div class="phone-app-header">
         <div class="phone-brand-mark">
-          <span class="phone-brand-title">NIAWLOU</span>
-          <span class="phone-brand-subtitle">Atelier Dakar</span>
+          <div class="flex items-center gap-1.5">
+            <span class="phone-brand-title">NIAWLOU</span>
+            <span class="maxit-pill">Max It</span>
+          </div>
+          <span class="phone-brand-subtitle" id="headerSubtitle">Haute Couture Dakar</span>
         </div>
-        <div class="phone-user-chip" id="userHeaderChip">
-          <img src="assets/img_35.jpg" alt="Awa Diop" class="phone-avatar"/>
-          <span class="phone-user-name" id="userHeaderName">Awa Diop</span>
+
+        <!-- Switcher Rôles In-App (Rapide, tactile et responsive pour mobile & PWA) -->
+        <div class="header-role-switch" id="headerRoleSwitch" role="group" aria-label="Sélecteur d'espace">
+          <button class="role-chip-btn active" id="btnHeaderClient" data-role="client" title="Mode Cliente (Awa Diop)">
+            <span class="material-symbols-outlined text-[15px]">person</span>
+            <span class="role-chip-text">Cliente</span>
+          </button>
+          <button class="role-chip-btn" id="btnHeaderCouturier" data-role="couturier" title="Mode Atelier (Maison Aïssatou)">
+            <span class="material-symbols-outlined text-[15px]">storefront</span>
+            <span class="role-chip-text">Atelier</span>
+          </button>
         </div>
+
+        <!-- Éléments masqués pour rétro-compatibilité scripts -->
+        <div id="userHeaderChip" style="display:none;"><img src="assets/img_35.jpg" alt="Awa Diop"/></div>
+        <span id="userHeaderName" style="display:none;">Awa Diop</span>
       </div>
 
       <!-- Toast Synchronisation Live -->
@@ -230,7 +245,12 @@
               <img src="assets/img_03.jpg" class="w-12 h-12 rounded-lg object-cover" alt="Atelier"/>
               <div class="flex-1">
                 <h4 class="font-bold text-xs text-ink">Maison Aïssatou</h4>
-                <p class="text-[11px] text-gray-500">Almadies · 4.9 ★ (120 avis)</p>
+                <p class="text-[11px] text-gray-500 flex items-center gap-1">
+                  <span>Almadies</span>
+                  <span>·</span>
+                  <span class="material-symbols-outlined text-[13px] text-amber-500">star</span>
+                  <span>4.9 (120 avis)</span>
+                </p>
               </div>
               <span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-bold">Vérifié</span>
             </div>
@@ -483,7 +503,9 @@
                 <!-- Étape 1 : Coupe -->
                 <div class="flex gap-3">
                   <div class="flex flex-col items-center">
-                    <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[12px]">✓</span>
+                    <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center">
+                      <span class="material-symbols-outlined text-[13px]">check</span>
+                    </span>
                     <div class="w-0.5 h-10 bg-emerald-600"></div>
                   </div>
                   <div>
@@ -495,7 +517,9 @@
                 <!-- Étape 2 : Assemblage (En cours avec photo) -->
                 <div class="flex gap-3">
                   <div class="flex flex-col items-center">
-                    <span class="w-6 h-6 rounded-full bg-terracotta text-white flex items-center justify-center text-[12px] animate-pulse">●</span>
+                    <span class="w-6 h-6 rounded-full bg-terracotta text-white flex items-center justify-center">
+                      <span class="material-symbols-outlined text-[13px] animate-spin">autorenew</span>
+                    </span>
                     <div class="w-0.5 h-16 bg-gray-200"></div>
                   </div>
                   <div>
@@ -617,6 +641,196 @@
           </div>
         </div>
 
+        <!-- ========================================== -->
+        <!-- VUE 7 : MESSAGERIE ATELIER DIRECTE        -->
+        <!-- ========================================== -->
+        <div class="page-view" id="view-messages">
+          <div class="p-3.5 border-b border-gray-100 flex items-center justify-between bg-white/90 backdrop-blur-md sticky top-0 z-10">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <img src="assets/img_03.jpg" class="w-10 h-10 rounded-full object-cover border border-emerald-700/20" alt="Maison Aïssatou"/>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 absolute bottom-0 right-0 border-2 border-white"></span>
+              </div>
+              <div>
+                <h2 class="font-serif font-bold text-xs text-ink leading-tight">Maison Aïssatou</h2>
+                <span class="text-[10px] text-emerald-800 font-semibold flex items-center gap-1">
+                  <span>En direct de l'atelier Almadies</span>
+                </span>
+              </div>
+            </div>
+            <span class="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full font-bold">NIA-0248</span>
+          </div>
+
+          <div class="p-4 space-y-3">
+            <div class="text-center">
+              <span class="text-[10px] text-gray-400 bg-gray-100/80 px-2.5 py-0.5 rounded-full">Aujourd'hui · Commande Robe Nala</span>
+            </div>
+
+            <!-- Message 1 Atelier -->
+            <div class="flex items-start gap-2 max-w-[85%]">
+              <img src="assets/img_03.jpg" class="w-7 h-7 rounded-full object-cover mt-1" alt="Atelier"/>
+              <div class="bg-white p-3 rounded-2xl rounded-tl-sm border border-gray-100 shadow-sm text-xs text-ink leading-relaxed">
+                <p>Bonjour Awa, nous avons bien réceptionné votre carnet de mesures (P 88 · T 68 · L 135 cm). Le tissu bazin vert noble est en cours de préparation.</p>
+                <span class="text-[9px] text-gray-400 block text-right mt-1">10:14</span>
+              </div>
+            </div>
+
+            <!-- Message 2 Cliente (Awa) -->
+            <div class="flex items-start gap-2 max-w-[85%] ml-auto justify-end">
+              <div class="bg-primary-dark text-white p-3 rounded-2xl rounded-tr-sm shadow-sm text-xs leading-relaxed">
+                <p>Merci beaucoup ! Pourriez-vous soigner particulièrement le drapé des hanches pour la cérémonie du 30 ?</p>
+                <span class="text-[9px] text-emerald-200/70 block text-right mt-1">10:16 · Lu</span>
+              </div>
+            </div>
+
+            <!-- Message 3 Atelier avec Photo & Note Vocale -->
+            <div class="flex items-start gap-2 max-w-[88%]">
+              <img src="assets/img_03.jpg" class="w-7 h-7 rounded-full object-cover mt-1" alt="Atelier"/>
+              <div class="bg-white p-3 rounded-2xl rounded-tl-sm border border-gray-100 shadow-sm space-y-2 text-xs">
+                <p class="text-ink">Absolument ! Voici la photo de la coupe du bustier prise à l'atelier il y a quelques instants :</p>
+                <div class="rounded-xl overflow-hidden border border-gray-100 relative">
+                  <img src="assets/img_00.jpg" class="w-full h-36 object-cover" alt="Bustier en cours"/>
+                  <span class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-md text-white text-[9px] px-2 py-0.5 rounded-full">Cliché certifié Atelier</span>
+                </div>
+
+                <!-- Note vocale factice interactive -->
+                <div class="bg-amber-50/70 border border-amber-200/60 p-2.5 rounded-xl flex items-center gap-2.5">
+                  <button class="w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center shadow-sm flex-shrink-0">
+                    <span class="material-symbols-outlined text-[18px]">play_arrow</span>
+                  </button>
+                  <div class="flex-1 min-w-0">
+                    <div class="h-1.5 bg-amber-200 rounded-full overflow-hidden">
+                      <div class="w-2/5 h-full bg-amber-600 rounded-full"></div>
+                    </div>
+                    <div class="flex justify-between text-[9px] text-amber-800 mt-1 font-semibold">
+                      <span>Note vocale artisan</span>
+                      <span>0:24</span>
+                    </div>
+                  </div>
+                </div>
+                <span class="text-[9px] text-gray-400 block text-right mt-1">10:28</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barre de saisie -->
+          <div class="p-2.5 bg-white border-t border-gray-100 flex items-center gap-2 mt-4">
+            <button class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center">
+              <span class="material-symbols-outlined text-[18px]">photo_camera</span>
+            </button>
+            <input type="text" placeholder="Écrire à Maison Aïssatou..." class="flex-1 bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-emerald-700"/>
+            <button class="w-8 h-8 rounded-full bg-primary-dark text-gold-soft flex items-center justify-center shadow-sm">
+              <span class="material-symbols-outlined text-[16px]">send</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VUE 8 : PROFIL CLIENTE & TEST DE L'APP     -->
+        <!-- ========================================== -->
+        <div class="page-view" id="view-profil">
+          <!-- Profil Header -->
+          <div class="p-4 bg-primary-dark text-white">
+            <div class="flex items-center gap-3">
+              <img src="assets/img_35.jpg" class="w-14 h-14 rounded-full object-cover border-2 border-gold-soft shadow-md" alt="Awa Diop" id="profilAvatar"/>
+              <div class="flex-1">
+                <div class="flex items-center gap-1.5">
+                  <h2 class="font-serif font-bold text-base text-white" id="profilName">Awa Diop</h2>
+                  <span class="material-symbols-outlined text-gold-soft text-[16px]">verified</span>
+                </div>
+                <p class="text-[11px] text-emerald-200/80">Mermoz, Dakar · Membre Max It</p>
+                <span class="inline-block mt-0.5 bg-white/10 text-gold-soft text-[9px] font-bold px-2 py-0.5 rounded-full border border-gold-soft/30">Cliente Privilège</span>
+              </div>
+            </div>
+
+            <!-- Solde Orange Money -->
+            <div class="mt-3 bg-white/10 backdrop-blur-md border border-white/15 p-3 rounded-xl flex items-center justify-between">
+              <div>
+                <span class="text-[9px] text-gray-300 uppercase tracking-wider block">Solde Orange Money</span>
+                <span class="font-bold text-lg text-gold-soft">84 500 FCFA</span>
+              </div>
+              <span class="bg-orange-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm">Actif</span>
+            </div>
+          </div>
+
+          <div class="p-4 space-y-3.5">
+            <!-- Sélecteur d'espace de test pour Mobile & PWA -->
+            <div class="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
+              <div class="flex items-center justify-between mb-1.5">
+                <h3 class="font-serif font-bold text-xs uppercase tracking-wider text-ink">Bascule de Rôle (Test)</h3>
+                <span class="text-[9px] text-terracotta font-bold">1-Clic</span>
+              </div>
+              <p class="text-[11px] text-gray-500 mb-2.5">
+                Basculez instantanément pour tester les deux facettes de l'application :
+              </p>
+              <div class="grid grid-cols-2 gap-2">
+                <button class="p-2.5 rounded-lg border border-primary-dark bg-emerald-50 text-left transition" id="profilSwitchClient">
+                  <div class="flex items-center gap-1 text-primary-dark font-bold text-xs">
+                    <span class="material-symbols-outlined text-[15px]">person</span>
+                    <span>Cliente (Awa)</span>
+                  </div>
+                  <span class="text-[9px] text-gray-500 block">Commander & Mesures</span>
+                </button>
+                <button class="p-2.5 rounded-lg border border-gray-200 hover:border-terracotta bg-white text-left transition" id="profilSwitchAtelier">
+                  <div class="flex items-center gap-1 text-ink font-bold text-xs">
+                    <span class="material-symbols-outlined text-[15px]">storefront</span>
+                    <span>Atelier (Maison Aïssatou)</span>
+                  </div>
+                  <span class="text-[9px] text-gray-500 block">Devis & Confection</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Carnet de mesures -->
+            <div class="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-emerald-700 text-[17px]">straighten</span>
+                  <h3 class="font-bold text-xs text-ink uppercase tracking-wider">Carnet de Mesures d'Awa</h3>
+                </div>
+                <span class="text-[9px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">Validé</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                <div class="bg-gray-50 p-2 rounded-lg">
+                  <span class="text-[9px] text-gray-400 block">Poitrine</span>
+                  <span class="font-bold text-ink">88 cm</span>
+                </div>
+                <div class="bg-gray-50 p-2 rounded-lg">
+                  <span class="text-[9px] text-gray-400 block">Taille</span>
+                  <span class="font-bold text-ink">68 cm</span>
+                </div>
+                <div class="bg-gray-50 p-2 rounded-lg">
+                  <span class="text-[9px] text-gray-400 block">Longueur</span>
+                  <span class="font-bold text-ink">135 cm</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Boutons Actions PWA & Reset -->
+            <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm space-y-2">
+              <button class="w-full bg-emerald-50 hover:bg-emerald-100 text-primary-dark p-2.5 rounded-lg font-bold text-xs flex items-center justify-between border border-emerald-200/60" id="btnInstallPwaMobile">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[17px] text-emerald-700">install_mobile</span>
+                  <span>Installer l'application PWA</span>
+                </div>
+                <span class="material-symbols-outlined text-[15px] text-gray-400">chevron_right</span>
+              </button>
+
+              <button class="w-full bg-gray-50 hover:bg-gray-100 text-gray-700 p-2.5 rounded-lg font-bold text-xs flex items-center justify-between border border-gray-200" id="btnResetTestMobile">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[17px] text-terracotta">refresh</span>
+                  <span>Réinitialiser la commande de test</span>
+                </div>
+                <span class="material-symbols-outlined text-[15px] text-gray-400">chevron_right</span>
+              </button>
+            </div>
+
+            <div class="text-center text-[10px] text-gray-400 pb-2">
+              NIAWLOU Haute Couture Dakar · Orange Max It Sénégal
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- BOTTOM NAVIGATION BAR (APPLE HIG 4 TABS) -->
@@ -630,18 +844,18 @@
           <span>Commandes</span>
           <span class="tab-badge" id="orderBadge">1</span>
         </a>
-        <a class="tab-item" id="tabMessages">
+        <a class="tab-item" id="tabMessages" data-target="view-messages">
           <span class="material-symbols-outlined">chat_bubble</span>
           <span>Messages</span>
         </a>
-        <a class="tab-item" id="tabProfil">
+        <a class="tab-item" id="tabProfil" data-target="view-profil">
           <span class="material-symbols-outlined">person</span>
           <span>Profil</span>
         </a>
       </nav>
 
-      <!-- Home Indicator iOS -->
-      <div class="phone-home-indicator"></div>
+      <!-- Home Indicator iOS (Desktop Mockup Only) -->
+      <div class="phone-home-indicator desktop-only-indicator"></div>
     </div>
 
     <!-- PANNEAU EXPLICATIF LATÉRAL POUR LE JURY DU CONCOURS (DESKTOP) -->
@@ -651,7 +865,7 @@
         <span>Dossier Jury · Max It Mini App</span>
       </div>
       <p class="sidebar-desc">
-        NIAWLOU est la première solution FashionTech sénégalaise intégrant la double expérience synchronisée <strong>Cliente ⇄ Couturier</strong>, avec sécurisation financière complète via Orange Money.
+        NIAWLOU est la première solution FashionTech sénégalaise intégrant la double expérience synchronisée <strong>Cliente & Couturier</strong>, avec sécurisation financière complète via Orange Money.
       </p>
 
       <!-- Métriques du Cas NIA-0248 -->

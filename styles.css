@@ -51,11 +51,12 @@ html, body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(233, 182, 93, 0.2);
-  padding: 12px 24px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -221,35 +222,92 @@ html, body {
 }
 
 /* Top App Header (Inside phone) */
+/* Top App Header (Inside phone & Main Mobile Header) */
 .phone-app-header {
-  height: 52px;
-  padding: 0 18px;
+  min-height: 52px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(252, 249, 244, 0.9);
-  backdrop-filter: blur(12px);
+  background: rgba(252, 249, 244, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-subtle);
   z-index: 90;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  gap: 8px;
 }
 .phone-brand-mark {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  min-width: 0;
 }
 .phone-brand-title {
   font-family: var(--font-serif);
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 800;
   letter-spacing: 0.12em;
   color: var(--green-primary);
   text-transform: uppercase;
+  line-height: 1.1;
+}
+.maxit-pill {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: #FF7900;
+  color: #FFF;
+  padding: 1px 5px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  line-height: 1.2;
+  box-shadow: 0 1px 4px rgba(255, 121, 0, 0.35);
 }
 .phone-brand-subtitle {
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   color: var(--terracotta);
   text-transform: uppercase;
+  margin-top: 1px;
+}
+
+/* In-App Role Switcher (Compact, touch-optimized for Mobile & PWA) */
+.header-role-switch {
+  display: flex;
+  background: rgba(16, 63, 53, 0.08);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  border: 1px solid rgba(16, 63, 53, 0.12);
+  gap: 2px;
+  flex-shrink: 0;
+}
+.role-chip-btn {
+  padding: 4px 9px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.role-chip-btn.active {
+  background: var(--green-primary);
+  color: var(--gold-soft);
+  box-shadow: 0 2px 8px rgba(16, 63, 53, 0.25);
+}
+.role-chip-btn .material-symbols-outlined {
+  font-size: 15px;
+  line-height: 1;
 }
 .phone-user-chip {
   display: flex;
@@ -263,7 +321,7 @@ html, body {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  object-cover: cover;
+  object-fit: cover;
   border: 1px solid var(--green-primary);
 }
 .phone-user-name {
@@ -644,30 +702,140 @@ html, body {
   background: #E66D00;
 }
 
-/* RESPONSIVE SMARTPHONE NATIVE (POUR LA PWA SUR MOBILE RÉEL) */
-@media (max-width: 800px) {
-  .jury-header {
-    padding: 8px 14px;
+/* ==========================================================================
+   RESPONSIVE REAL MOBILE APP & PWA NATIVE MODE
+   Sur mobile et en mode PWA standalone :
+   - Suppression totale du mode démo jury et du bandeau supérieur
+   - Suppression de la fausse barre de statut (l'appareil a déjà la sienne)
+   - Suppression de la dynamic island et de la barre home factice
+   - Mockup transformé en conteneur 100% plein écran fluide
+   - Prise en charge native des Safe Area Insets (encoches, barres de gestes)
+   ========================================================================== */
+
+@media (max-width: 820px), (display-mode: standalone), (hover: none) and (pointer: coarse) {
+  html, body {
+    background-color: var(--ivory-bg) !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow-x: hidden !important;
   }
-  .brand-title {
-    font-size: 18px;
+
+  /* 1. Masquer tous les éléments de démonstration bureau */
+  .jury-header,
+  .jury-sidebar,
+  .desktop-only-status,
+  .phone-status-bar,
+  .desktop-only-island,
+  .dynamic-island,
+  .desktop-only-indicator,
+  .phone-home-indicator {
+    display: none !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    pointer-events: none !important;
   }
-  .jury-sidebar {
-    display: none;
-  }
+
+  /* 2. Plein écran pour l'application native */
   .app-container {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    min-height: 100vh;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
   }
+
   .phone-mockup {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-    box-shadow: none;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 100dvh !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: var(--ivory-bg) !important;
+    position: relative !important;
+    overflow: hidden !important;
   }
-  .dynamic-island {
-    display: none;
+
+  /* 3. Header d'application avec encoche iOS / Android */
+  .phone-app-header {
+    min-height: calc(52px + env(safe-area-inset-top, 0px)) !important;
+    padding-top: max(8px, env(safe-area-inset-top)) !important;
+    padding-bottom: 8px !important;
+    padding-left: max(16px, env(safe-area-inset-left)) !important;
+    padding-right: max(16px, env(safe-area-inset-right)) !important;
   }
+
+  /* 4. Barre d'onglets basse avec barre de navigation système */
+  .phone-tabbar {
+    height: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: max(6px, env(safe-area-inset-bottom)) !important;
+    padding-left: max(8px, env(safe-area-inset-left)) !important;
+    padding-right: max(8px, env(safe-area-inset-right)) !important;
+  }
+
+  /* 5. Viewport de défilement fluide */
+  .phone-content {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 6. Toast d'information en dessous de la barre système */
+  .sync-toast {
+    top: calc(60px + env(safe-area-inset-top, 0px)) !important;
+    left: 14px !important;
+    right: 14px !important;
+  }
+
+  /* 7. Boîte Orange Money adaptée */
+  .om-dialog {
+    max-width: 320px;
+    width: 90%;
+    padding: 20px 16px;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+}
+
+/* Règle explicite pour la classe injectée en JS pour les écrans mobiles */
+body.is-mobile-app .jury-header,
+body.is-mobile-app .jury-sidebar,
+body.is-mobile-app .desktop-only-status,
+body.is-mobile-app .phone-status-bar,
+body.is-mobile-app .desktop-only-island,
+body.is-mobile-app .dynamic-island,
+body.is-mobile-app .desktop-only-indicator,
+body.is-mobile-app .phone-home-indicator {
+  display: none !important;
+}
+
+body.is-mobile-app {
+  background-color: var(--ivory-bg) !important;
+}
+body.is-mobile-app .app-container {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 100dvh !important;
+}
+body.is-mobile-app .phone-mockup {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 100dvh !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
 }

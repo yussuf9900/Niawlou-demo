@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+  
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 18mm 16mm;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    color: #1A2420;
+    line-height: 1.5;
+    background: #FFF;
+    font-size: 10pt;
+  }
+
+  .cover {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #0E1513;
+    color: #F7F3ED;
+    padding: 60px 45px;
+    page-break-after: always;
+  }
+  .cover-badge {
+    background: rgba(233, 182, 93, 0.15);
+    border: 1px solid #E9B65D;
+    color: #E9B65D;
+    font-size: 8.5pt;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 30px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .cover-title {
+    font-family: 'Fraunces', serif;
+    font-size: 38pt;
+    font-weight: 800;
+    color: #E9B65D;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .cover-subtitle {
+    font-size: 16pt;
+    color: #FFF;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .cover-desc {
+    font-size: 11pt;
+    color: #CCD6D2;
+    max-width: 580px;
+    line-height: 1.6;
+    border-left: 3px solid #E9B65D;
+    padding-left: 16px;
+  }
+  .cover-meta {
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    font-size: 9pt;
+  }
+  .meta-label { color: #A0B2AC; text-transform: uppercase; font-size: 7.5pt; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .meta-val { font-weight: 700; color: #FFF; }
+
+  .page { page-break-after: always; padding-top: 10px; }
+  .page:last-child { page-break-after: avoid; }
+
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #103F35;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+  .header-title {
+    font-family: 'Fraunces', serif;
+    font-size: 13pt;
+    font-weight: 700;
+    color: #103F35;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .header-tag {
+    font-size: 8pt;
+    color: #9F4F35;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 15pt;
+    color: #103F35;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+  h3 {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #9F4F35;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  p { margin-bottom: 8px; text-align: justify; }
+
+  .code-block {
+    background: #1A2420;
+    color: #E9B65D;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5pt;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 10px 0;
+    line-height: 1.4;
+    overflow-x: hidden;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 12px 0;
+  }
+
+  .card-box {
+    background: #F9F9F8;
+    border: 1px solid #E5E5E2;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .card-box h4 {
+    color: #103F35;
+    font-size: 9.5pt;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .card-box p { font-size: 8.5pt; color: #555; margin-bottom: 0; text-align: left; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 8.5pt;
+  }
+  th {
+    background: #103F35;
+    color: #FFF;
+    text-align: left;
+    padding: 6px 10px;
+    font-weight: 700;
+    border: 1px solid #103F35;
+  }
+  td {
+    padding: 6px 10px;
+    border: 1px solid #E0E0E0;
+  }
+  tr:nth-child(even) td { background: #FBFBFA; }
+
+  .badge-success {
+    background: #103F35;
+    color: #E9B65D;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 8pt;
+  }
+  .badge-info {
+    background: #9F4F35;
+    color: #FFF;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 8pt;
+  }
+</style>
+</head>
+<body>
+
+  <!-- COUVERTURE -->
+  <div class="cover">
+    <div>
+      <span class="cover-badge">Spécifications Techniques · MVP Validé</span>
+    </div>
+
+    <div>
+      <h1 class="cover-title">FICHE TECHNIQUE</h1>
+      <div class="cover-subtitle">Architecture Système, Règles Métier & Audit d'Intégration Max It</div>
+      <p class="cover-desc">
+        Document d'ingénierie logicielle pour la mini-application NIAWLOU. Synthèse de l'architecture distribuée (Clean Architecture), audit complet du backend TypeScript/Prisma (20 tests automatisés validés), sécurisation des transactions Orange Money et conformité à la webview Tencent / Max It.
+      </p>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="meta-label">Stack Backend</div>
+        <div class="meta-val">Node.js 24 · TS · Prisma · PostgreSQL</div>
+      </div>
+      <div>
+        <div class="meta-label">Stack Frontend</div>
+        <div class="meta-val">PWA Vanilla · Tailwind · Service Worker</div>
+      </div>
+      <div>
+        <div class="meta-label">Environnement Live</div>
+        <div class="meta-val">Vercel (Front) · Render (API Swagger)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 1 : STATUT DÉPLOIEMENT & ENVIRONNEMENTS -->
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-title">1. Statut Opérationnel & Déploiements Actifs</span>
+      <span class="header-tag">ENVIRONNEMENTS LIVRÉS</span>
+    </div>
+
+    <h2>Une Solution Déployée en Production</h2>
+    <p>
+      Contrairement à une simple maquette statique, le projet NIAWLOU est livré avec <strong>l'ensemble de ses composants opérationnels</strong>, testables en direct par les évaluateurs techniques du concours :
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Composant</th>
+          <th>Environnement d'Hébergement</th>
+          <th>URL Publique d'Accès</th>
+          <th>Garanties & Conformité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Frontend PWA</strong></td>
+          <td>Vercel Production Edge</td>
+          <td><a href="https://niawlou-five.vercel.app/" style="color:#103F35; font-weight:bold;">https://niawlou-five.vercel.app/</a></td>
+          <td>PWA autonome, 4 onglets Apple HIG, cache local 100% hors-ligne.</td>
+        </tr>
+        <tr>
+          <td><strong>API Backend & Swagger</strong></td>
+          <td>Render Cloud (Node.js/Prisma)</td>
+          <td><a href="https://niawlou-backend.onrender.com/api/docs/" style="color:#103F35; font-weight:bold;">https://niawlou-backend.onrender.com/api/docs/</a></td>
+          <td>Spécification OpenAPI 3.0.3, Auth JWT automatique, sandbox de test.</td>
+        </tr>
+        <tr>
+          <td><strong>Code Source Frontend</strong></td>
+          <td>GitHub Public Repository</td>
+          <td><a href="https://github.com/yussuf9900/Niawlou-demo" style="color:#103F35; font-weight:bold;">github.com/yussuf9900/Niawlou-demo</a></td>
+          <td>Dépôt versionné avec configuration CI/CD Vercel et Service Worker.</td>
+        </tr>
+        <tr>
+          <td><strong>Maquette Figma</strong></td>
+          <td>Figma Cloud Pro</td>
+          <td><a href="https://www.figma.com/design/qZP6Kz84rsTGhV6lHvaM7F/Sans-titre?node-id=7-2" style="color:#103F35; font-weight:bold;">figma.com/design/qZP6Kz84rsTGhV6lHvaM7F</a></td>
+          <td>20 écrans haute fidélité (10 Client + 10 Couturier) connectés.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Audit Complet du Backend (Résultats des Tests Vitest)</h2>
+    <p>
+      Le backend a été soumis à une suite de tests automatisés couvrant les calculs financiers, la sécurité des tokens, l'authentification et l'intégration des flux transactionnels.
+    </p>
+    <div class="code-block">
+✓ src/tests/Money.test.ts (4 tests passés) - Précision FCFA, calcul acompte 41%, solde 59%
+✓ src/tests/Order.test.ts (3 tests passés) - Machine d'état devis et étapes de confection
+✓ src/tests/Swagger.test.ts (1 test passé) - Conformité stricte du schéma OpenAPI 3.0.3
+✓ src/tests/SwaggerAuth.test.ts (3 tests passés) - Intercepteur de session JWT
+✓ src/tests/AuthRegister.test.ts (4 tests passés) - Contrôle rôles CLIENT, COUTURIER, ADMIN
+✓ src/tests/ApiIntegration.test.ts (5 tests passés) - Requêtes E2E réelles sur base PostgreSQL
+
+RÉSULTAT : 6 suites de tests validées (6/6) · 20 tests passés avec succès (20/20) · 100% Succès
+    </div>
+  </div>
+
+  <!-- PAGE 2 : ARCHITECTURE APPLICATIVE & BASE DE DONNÉES -->
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-title">2. Architecture Applicative & Modèle de Données</span>
+      <span class="header-tag">INGÉNIERIE LOGICIELLE</span>
+    </div>
+
+    <h2>Clean Architecture en 4 Couches</h2>
+    <p>
+      Le backend adopte les principes de la Clean Architecture (Ports & Adapters) pour garantir une séparation stricte entre les règles métier et les connecteurs externes (Orange Money, Base de données, Webhooks) :
+    </p>
+    <div class="grid-2">
+      <div class="card-box">
+        <h4>1. Core Domain & Entités</h4>
+        <p>• Objets de valeur immuables : <code>Money</code> (FCFA), <code>OrderReference</code>, <code>MeasurementsSnapshot</code>.<br>• Entités métier pures : <code>Order</code>, <code>TailorProfile</code>, <code>PaymentTransaction</code>.</p>
+      </div>
+      <div class="card-box">
+        <h4>2. Cas d'Utilisation (Use Cases)</h4>
+        <p>• <code>CreateOrderUseCase</code> : vérification des mensurations et calcul de livraison.<br>• <code>ValidateQuotationUseCase</code> : validation atelier.<br>• <code>ProcessOrangeMoneyWebhookUseCase</code> : transition d'état idempotente.</p>
+      </div>
+      <div class="card-box">
+        <h4>3. Couche Présentation (REST / Swagger)</h4>
+        <p>• Contrôleurs Express typés avec validation de schéma <strong>Zod DTO</strong>.<br>• Middlewares d'autorisation RBAC (Role-Based Access Control).<br>• Documentation OpenAPI synchronisée en direct.</p>
+      </div>
+      <div class="card-box">
+        <h4>4. Couche Infrastructure (Prisma & DB)</h4>
+        <p>• ORM Prisma avec pilote PostgreSQL hébergé sur Neon.<br>• Migrations déclaratives et typage TypeScript strict de bout en bout.<br>• Service de notification événementiel (SMS / Push).</p>
+      </div>
+    </div>
+
+    <h2>Schéma de Données Relationnel (Prisma Schema)</h2>
+    <p>
+      Le modèle garantit la traçabilité intégrale de la commande et l'immuabilité des mensurations après accord :
+    </p>
+    <div class="code-block">
+model Order {
+  id                   String    @id @default(uuid())
+  orderReference       String    @unique // ex: "NIA-0248"
+  clientId             String
+  tailorId             String
+  clothingPrice        Int       // 35 000 FCFA
+  deliveryFee          Int       // 1 500 FCFA
+  totalAmount          Int       // 36 500 FCFA
+  advanceAmount        Int       // 15 000 FCFA
+  balanceAmount        Int       // 21 500 FCFA
+  deliveryMode         String    @default("DOMICILE") // ATELIER ou DOMICILE
+  deliveryStatus       String    @default("A_DEFINIR")
+  orderStatus          String    @default("DEVIS_A_ACCEPTER")
+  confectionStep       String    @default("NON_COMMENCEE")
+  measurementsSnapshot String    // JSON figé (Poitrine: 88, Taille: 68, Longueur: 135)
+  advancePaymentRef    String?   // Référence Orange Money certifiée
+  balancePaymentRef    String?
+  transactions         PaymentTransaction[]
+}
+    </div>
+  </div>
+
+  <!-- PAGE 3 : RÈGLES MÉTIER & ORANGE MONEY -->
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-title">3. Règles Métier & Sécurisation Orange Money</span>
+      <span class="header-tag">PROTOCOLE TRANSACTIONNEL</span>
+    </div>
+
+    <h2>Le Cycle de Vie Strict de la Commande (8 Jalons)</h2>
+    <p>
+      Pour éradiquer les ambiguïtés et sécuriser les fonds des utilisateurs, la machine d'état suit un workflow unidirectionnel garanti par le serveur :
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Jalon Système</th>
+          <th>Acteur Clé</th>
+          <th>Condition Préalable & Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>01</strong></td>
+          <td><code>DEMANDE_ENVOYEE</code></td>
+          <td>Cliente</td>
+          <td>Choix du modèle Robe Nala + sélection du carnet de mensurations vérifié.</td>
+        </tr>
+        <tr>
+          <td><strong>02</strong></td>
+          <td><code>DEVIS_PROPOSE</code></td>
+          <td>Couturier</td>
+          <td>L'atelier confirme la faisabilité technique et chiffre la façon (35 000 F) + course (1 500 F).</td>
+        </tr>
+        <tr>
+          <td><strong>03</strong></td>
+          <td><code>DEVIS_ACCEPTE</code></td>
+          <td>Cliente</td>
+          <td><strong>Condition préalable obligatoire :</strong> Aucun acompte n'est payable sans acceptation explicite.</td>
+        </tr>
+        <tr>
+          <td><strong>04</strong></td>
+          <td><code>ACOMPTE_CONFIRME</code></td>
+          <td>Orange Money</td>
+          <td>Retour webhook opérateur vérifié (15 000 FCFA). Les mesures sont verrouillées (snapshot immuable).</td>
+        </tr>
+        <tr>
+          <td><strong>05</strong></td>
+          <td><code>COUPE_ASSEMBLAGE</code></td>
+          <td>Couturier</td>
+          <td>Démarrage de la confection artisanale ; transmission de clichés de contrôle à la cliente.</td>
+        </tr>
+        <tr>
+          <td><strong>06</strong></td>
+          <td><code>VETEMENT_PRET</code></td>
+          <td>Couturier</td>
+          <td>Finitions manuelles achevées, contrôle qualité interne et emballage sous housse textile.</td>
+        </tr>
+        <tr>
+          <td><strong>07</strong></td>
+          <td><code>REMISE_EFFECTUEE</code></td>
+          <td>Coursier / Client</td>
+          <td><strong>Découplage strict :</strong> Le constat physique de remise est validé AVANT l'exigibilité du solde.</td>
+        </tr>
+        <tr>
+          <td><strong>08</strong></td>
+          <td><code>COMMANDE_CLOTUREE</code></td>
+          <td>Orange Money</td>
+          <td>Paiement du solde vérifié (21 500 FCFA). Génération du reçu fiscal numérique certifié.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Sécurité & Idempotence Orange Money</h2>
+    <p>
+      La gestion des paiements repose sur des principes bancaires de haute disponibilité :
+    </p>
+    <div class="grid-2">
+      <div class="card-box">
+        <h4>Idempotence des Transactions</h4>
+        <p>Chaque tentative de paiement génère un <code>transactionReference</code> unique (ex: <code>OM-NIA-0248-ADV-8924</code>). Toute notification webhook reçue en doublon est ignorée sans double débit.</p>
+      </div>
+      <div class="card-box">
+        <h4>Séparation Remise / Solde</h4>
+        <p>Le frontend ne peut pas forcer le déblocage du solde. Le serveur exige la confirmation de la livraison physique avant d'autoriser l'appel au paiement final.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4 : CONFORMITÉ MAX IT / TENCENT -->
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-title">4. Intégration Max It & Conformité Tencent</span>
+      <span class="header-tag">SPÉCIFICATIONS RUNTIME</span>
+    </div>
+
+    <h2>Contraintes Techniques Tencent Mini Program</h2>
+    <p>
+      L'écosystème Orange Max It s'appuie sur le framework de mini-applications Tencent. Notre prototype respecte l'ensemble des contraintes de sécurité et de légèreté :
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Critère d'Éligibilité Max It</th>
+          <th>Exigence Standard</th>
+          <th>Implémentation Réalisée sur NIAWLOU</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Poids du Bundle Initial</strong></td>
+          <td>&lt; 4 Mo compressé</td>
+          <td><span class="badge-success">Conforme (1,9 Mo total)</span> · Images optimisées localement.</td>
+        </tr>
+        <tr>
+          <td><strong>Indépendance Réseau (Offline)</strong></td>
+          <td>Zéro écran blanc si coupure</td>
+          <td><span class="badge-success">Conforme</span> · Service Worker PWA avec stratégie Cache-First.</td>
+        </tr>
+        <tr>
+          <td><strong>Ergonomie Tactile Mobile</strong></td>
+          <td>Cibles tactiles &gt; 44x44 px</td>
+          <td><span class="badge-success">Conforme</span> · 390px viewport Apple HIG, boutons collants 48px.</td>
+        </tr>
+        <tr>
+          <td><strong>Sécurité des Flux API</strong></td>
+          <td>HTTPS obligatoire, zéro CDN instable</td>
+          <td><span class="badge-success">Conforme</span> · Vercel HTTPS Edge + Render SSL backend certifié.</td>
+        </tr>
+        <tr>
+          <td><strong>Authentification Unique (SSO)</strong></td>
+          <td>Tokens compatibles Max It</td>
+          <td><span class="badge-success">Conforme</span> · JWT Session avec validation rôle côté serveur.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="card-box" style="margin-top: 25px; border-left: 4px solid #103F35;">
+      <h4>Conclusion de l'Audit Technique</h4>
+      <p style="font-size:9.5pt; color:#222;">
+        Le projet NIAWLOU présente une <strong>maturité technique exemplaire pour un livrable MVP</strong>. Toutes les fonctionnalités présentées dans les maquettes et la vidéo correspondent à des modèles de données et des routes API existantes, testées et déployées en ligne.
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>

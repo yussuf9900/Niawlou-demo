@@ -1,6 +1,6 @@
 /**
- * NIAWLOU — Mini App Orange Max It
- * Architecture SPA réactive & Machine d'États Synchronisée
+ * NIAWLOU — Mini App Orange Max It & PWA
+ * Architecture SPA réactive & Synchronisation Multi-Rôle (Cliente et Atelier)
  */
 
 // État centralisé de la commande pilote NIA-0248
@@ -25,7 +25,7 @@ const STATE = {
   autoPlayTimer: null
 };
 
-// Horloge temps réel pour la status bar iPhone
+// Horloge pour la fausse status bar sur Desktop
 function updateClock() {
   const el = document.getElementById('phoneClock');
   if (!el) return;
@@ -37,7 +37,21 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// Gestion des vues mobiles
+// Détection Mobile & PWA Native
+function checkMobileMode() {
+  const isMobile = window.innerWidth <= 820 ||
+                   window.matchMedia('(display-mode: standalone)').matches ||
+                   /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (isMobile) {
+    document.body.classList.add('is-mobile-app');
+  } else {
+    document.body.classList.remove('is-mobile-app');
+  }
+}
+window.addEventListener('resize', checkMobileMode);
+checkMobileMode();
+
+// Navigation entre les vues mobiles
 function showView(viewId) {
   document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById(viewId);
@@ -51,7 +65,14 @@ function showView(viewId) {
   }
 }
 
-// Toast de synchronisation multi-rôle
+// Mise en surbrillance de l'onglet actif
+function setActiveTab(id) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById(id);
+  if (tab) tab.classList.add('active');
+}
+
+// Toast de synchronisation temps réel
 function showLiveToast(title, desc, actionLabel = 'Voir', onAction = null) {
   const toast = document.getElementById('liveToast');
   const tTitle = document.getElementById('toastTitle');
@@ -71,47 +92,85 @@ function showLiveToast(title, desc, actionLabel = 'Voir', onAction = null) {
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 4500);
+  }, 4200);
 }
 
-// Bascule de Rôle (Cliente Awa Diop ⇄ Atelier Maison Aïssatou)
+// Bascule de Rôle (Cliente Awa Diop et Atelier Maison Aïssatou)
 function setRole(role, notify = true) {
   STATE.currentRole = role;
   
+  // Boutons Desktop (barre supérieure jury)
   const btnClient = document.getElementById('btnRoleClient');
   const btnCouturier = document.getElementById('btnRoleCouturier');
-  const userHeaderChip = document.getElementById('userHeaderChip');
+  
+  // Boutons Header In-App (Mobile & PWA)
+  const btnHClient = document.getElementById('btnHeaderClient');
+  const btnHCouturier = document.getElementById('btnHeaderCouturier');
+
+  // Boutons Profil
+  const btnPClient = document.getElementById('profilSwitchClient');
+  const btnPCouturier = document.getElementById('profilSwitchAtelier');
+
+  // Sous-titre Header
+  const headerSubtitle = document.getElementById('headerSubtitle');
   const userHeaderName = document.getElementById('userHeaderName');
   
   if (role === 'client') {
-    btnClient.classList.add('active');
-    btnCouturier.classList.remove('active');
-    userHeaderName.innerText = 'Awa Diop';
-    userHeaderChip.querySelector('img').src = 'assets/img_35.jpg';
+    if (btnClient) btnClient.classList.add('active');
+    if (btnCouturier) btnCouturier.classList.remove('active');
+    if (btnHClient) btnHClient.classList.add('active');
+    if (btnHCouturier) btnHCouturier.classList.remove('active');
+    if (btnPClient) {
+      btnPClient.classList.add('border-primary-dark', 'bg-emerald-50');
+      btnPClient.classList.remove('border-gray-200', 'bg-white');
+    }
+    if (btnPCouturier) {
+      btnPCouturier.classList.remove('border-primary-dark', 'bg-emerald-50');
+      btnPCouturier.classList.add('border-gray-200', 'bg-white');
+    }
+
+    if (headerSubtitle) headerSubtitle.innerText = 'Haute Couture Dakar';
+    if (userHeaderName) userHeaderName.innerText = 'Awa Diop';
     
-    // Naviguer selon l'état de la commande
+    // Mettre à jour l'onglet actif
     if (STATE.order.status === 'DEVIS_RECU') {
       showView('view-devis');
+      setActiveTab('tabCommandes');
     } else if (STATE.order.status === 'ACOMPTE_PAYE' || STATE.order.status === 'EN_CONFECTION') {
       showView('view-suivi');
+      setActiveTab('tabCommandes');
     } else if (STATE.order.status === 'SOLDE_PAYE') {
       showView('view-recu');
+      setActiveTab('tabCommandes');
     } else {
       showView('view-decouvrir');
+      setActiveTab('tabDecouvrir');
     }
   } else {
-    btnCouturier.classList.add('active');
-    btnClient.classList.remove('active');
-    userHeaderName.innerText = 'Maison Aïssatou';
-    userHeaderChip.querySelector('img').src = 'assets/img_03.jpg';
+    if (btnCouturier) btnCouturier.classList.add('active');
+    if (btnClient) btnClient.classList.remove('active');
+    if (btnHCouturier) btnHCouturier.classList.add('active');
+    if (btnHClient) btnHClient.classList.remove('active');
+    if (btnPCouturier) {
+      btnPCouturier.classList.add('border-primary-dark', 'bg-emerald-50');
+      btnPCouturier.classList.remove('border-gray-200', 'bg-white');
+    }
+    if (btnPClient) {
+      btnPClient.classList.remove('border-primary-dark', 'bg-emerald-50');
+      btnPClient.classList.add('border-gray-200', 'bg-white');
+    }
+
+    if (headerSubtitle) headerSubtitle.innerText = 'Espace Artisan Dakar';
+    if (userHeaderName) userHeaderName.innerText = 'Maison Aïssatou';
     
     showView('view-atelier-dashboard');
+    setActiveTab('tabCommandes');
   }
 
   if (notify) {
     showLiveToast(
       role === 'client' ? 'Espace Cliente · Awa Diop' : 'Espace Atelier · Maison Aïssatou',
-      role === 'client' ? 'Navigation dans votre carnet de mesures et commandes' : 'Gestion des commandes et transmission des devis'
+      role === 'client' ? 'Catalogue, carnet de mesures et commandes' : 'Gestion des commandes reçues et transmission des devis'
     );
   }
 }
@@ -122,160 +181,260 @@ function openOrangeMoney(amount, purpose, onCompleted) {
   const amountText = document.getElementById('omAmountText');
   const payBtn = document.getElementById('omPayBtn');
   
-  amountText.innerText = `${amount.toLocaleString('fr-FR')} FCFA`;
-  overlay.style.display = 'flex';
+  if (amountText) amountText.innerText = `${amount.toLocaleString('fr-FR')} FCFA`;
+  if (overlay) overlay.style.display = 'flex';
   
-  payBtn.onclick = () => {
-    payBtn.innerText = 'Validation Orange Money...';
-    payBtn.style.opacity = '0.7';
-    
-    setTimeout(() => {
-      overlay.style.display = 'none';
-      payBtn.innerText = 'Confirmer le paiement';
-      payBtn.style.opacity = '1';
+  if (payBtn) {
+    payBtn.onclick = () => {
+      payBtn.innerText = 'Validation Orange Money...';
+      payBtn.style.opacity = '0.7';
       
-      showLiveToast(
-        'Paiement Orange Money Réussi',
-        `${amount.toLocaleString('fr-FR')} FCFA débités avec succès. Réf: OM-DKR-8924`
-      );
-      
-      if (onCompleted) onCompleted();
-    }, 1200);
-  };
+      setTimeout(() => {
+        if (overlay) overlay.style.display = 'none';
+        payBtn.innerText = 'Confirmer le paiement';
+        payBtn.style.opacity = '1';
+        
+        showLiveToast(
+          'Paiement Orange Money Réussi',
+          `${amount.toLocaleString('fr-FR')} FCFA débités avec succès. Réf: OM-DKR-8924`
+        );
+        
+        if (onCompleted) onCompleted();
+      }, 1000);
+    };
+  }
 }
 
-// Écouteurs d'Événements et Logique Applicative
+// Gestionnaire d'installation PWA
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  console.log('NIAWLOU PWA disponible pour installation');
+});
+
+function triggerPwaInstall() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        showLiveToast('Installation confirmée', 'L\'application NIAWLOU a été ajoutée à votre appareil.');
+      }
+      deferredInstallPrompt = null;
+    });
+  } else {
+    showLiveToast(
+      'Installation PWA Max It',
+      'Sur iPhone : appuyez sur le bouton Partager puis "Sur l\'écran d\'accueil". Sur Android : sélectionnez "Installer l\'application".'
+    );
+  }
+}
+
+// Initialisation au chargement du DOM
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. Boutons Rôles
-  document.getElementById('btnRoleClient').onclick = () => setRole('client');
-  document.getElementById('btnRoleCouturier').onclick = () => setRole('couturier');
+  // 1. Boutons Rôles (Desktop Header)
+  const btnRoleClient = document.getElementById('btnRoleClient');
+  const btnRoleCouturier = document.getElementById('btnRoleCouturier');
+  if (btnRoleClient) btnRoleClient.onclick = () => setRole('client');
+  if (btnRoleCouturier) btnRoleCouturier.onclick = () => setRole('couturier');
 
-  // 2. Découvrir -> Choix Robe Nala
-  document.getElementById('btnSelectNala').onclick = () => {
-    showView('view-mensurations');
-    showLiveToast('Robe Nala Sélectionnée', 'Vérifiez vos mensurations et l’adresse de livraison');
-  };
+  // 2. Boutons Rôles (In-App Mobile & PWA Header)
+  const btnHeaderClient = document.getElementById('btnHeaderClient');
+  const btnHeaderCouturier = document.getElementById('btnHeaderCouturier');
+  if (btnHeaderClient) btnHeaderClient.onclick = () => setRole('client');
+  if (btnHeaderCouturier) btnHeaderCouturier.onclick = () => setRole('couturier');
 
-  // 3. Retour vers Découvrir
-  document.getElementById('btnBackToDecouvrir').onclick = () => showView('view-decouvrir');
+  // 3. Boutons Rôles (Vue Profil)
+  const profilSwitchClient = document.getElementById('profilSwitchClient');
+  const profilSwitchAtelier = document.getElementById('profilSwitchAtelier');
+  if (profilSwitchClient) profilSwitchClient.onclick = () => setRole('client');
+  if (profilSwitchAtelier) profilSwitchAtelier.onclick = () => setRole('couturier');
 
-  // 4. Soumettre la Demande
-  document.getElementById('btnSubmitDemande').onclick = () => {
-    STATE.order.status = 'EN_ATTENTE_DEVIS';
-    showLiveToast(
-      'Demande transmise à Maison Aïssatou',
-      'L’atelier examine vos mesures. Basculez côté Couturier pour le chiffrage !',
-      'Atelier',
-      () => setRole('couturier')
-    );
-    // Bascule automatique côté atelier après 1.2s pour montrer l'interaction au jury
-    setTimeout(() => {
-      setRole('couturier');
-    }, 1200);
-  };
+  // 4. Découvrir -> Choix Robe Nala
+  const btnSelectNala = document.getElementById('btnSelectNala');
+  if (btnSelectNala) {
+    btnSelectNala.onclick = () => {
+      showView('view-mensurations');
+      showLiveToast('Robe Nala Sélectionnée', 'Vérifiez vos mensurations et l’adresse de réception');
+    };
+  }
 
-  // 5. Atelier : Préparer et Envoyer le Devis
-  document.getElementById('btnPrepareDevis').onclick = () => {
-    STATE.order.status = 'DEVIS_RECU';
-    showLiveToast(
-      'Devis Officiel Émis (36 500 FCFA)',
-      'Devis transmis à Awa Diop. Basculez côté Cliente pour validation !',
-      'Cliente',
-      () => setRole('client')
-    );
-    // Bascule automatique vers Awa Diop
-    setTimeout(() => {
-      setRole('client');
-      showView('view-devis');
-    }, 1200);
-  };
+  // 5. Retour vers Découvrir
+  const btnBackToDecouvrir = document.getElementById('btnBackToDecouvrir');
+  if (btnBackToDecouvrir) {
+    btnBackToDecouvrir.onclick = () => {
+      showView('view-decouvrir');
+      setActiveTab('tabDecouvrir');
+    };
+  }
 
-  // 6. Cliente : Accepter Devis & Payer Acompte OM
-  document.getElementById('btnAcceptDevis').onclick = () => {
-    openOrangeMoney(15000, "Acompte Commande NIA-0248", () => {
-      STATE.order.status = 'ACOMPTE_PAYE';
-      showView('view-suivi');
-      showLiveToast('Confection Lancée', 'Maison Aïssatou a reçu l’acompte et entame la coupe.');
-    });
-  };
+  // 6. Soumettre la Demande à l'Atelier
+  const btnSubmitDemande = document.getElementById('btnSubmitDemande');
+  if (btnSubmitDemande) {
+    btnSubmitDemande.onclick = () => {
+      STATE.order.status = 'EN_ATTENTE_DEVIS';
+      showLiveToast(
+        'Demande transmise à Maison Aïssatou',
+        'L’atelier examine vos mesures. Basculez côté Couturier pour le chiffrage !',
+        'Atelier',
+        () => setRole('couturier')
+      );
+      // Bascule automatique côté atelier après 1.2s pour tester le flux
+      setTimeout(() => {
+        setRole('couturier');
+      }, 1200);
+    };
+  }
 
-  // 7. Simuler la Livraison & Règlement du Solde
-  document.getElementById('btnSimulateDelivery').onclick = () => {
-    openOrangeMoney(21500, "Solde Commande NIA-0248", () => {
-      STATE.order.status = 'SOLDE_PAYE';
-      showView('view-recu');
-    });
-  };
+  // 7. Atelier : Préparer et Envoyer le Devis
+  const btnPrepareDevis = document.getElementById('btnPrepareDevis');
+  if (btnPrepareDevis) {
+    btnPrepareDevis.onclick = () => {
+      STATE.order.status = 'DEVIS_RECU';
+      showLiveToast(
+        'Devis Officiel Émis (36 500 FCFA)',
+        'Devis transmis à Awa Diop. Basculez côté Cliente pour validation !',
+        'Cliente',
+        () => setRole('client')
+      );
+      setTimeout(() => {
+        setRole('client');
+        showView('view-devis');
+        setActiveTab('tabCommandes');
+      }, 1200);
+    };
+  }
 
-  // 8. Recommencer la Démo
-  document.getElementById('btnRestartDemo').onclick = () => {
+  // 8. Cliente : Accepter Devis & Payer Acompte OM
+  const btnAcceptDevis = document.getElementById('btnAcceptDevis');
+  if (btnAcceptDevis) {
+    btnAcceptDevis.onclick = () => {
+      openOrangeMoney(15000, "Acompte Commande NIA-0248", () => {
+        STATE.order.status = 'ACOMPTE_PAYE';
+        showView('view-suivi');
+        setActiveTab('tabCommandes');
+        showLiveToast('Confection Lancée', 'Maison Aïssatou a reçu l’acompte et entame la coupe.');
+      });
+    };
+  }
+
+  // 9. Simuler la Livraison & Règlement du Solde
+  const btnSimulateDelivery = document.getElementById('btnSimulateDelivery');
+  if (btnSimulateDelivery) {
+    btnSimulateDelivery.onclick = () => {
+      openOrangeMoney(21500, "Solde Commande NIA-0248", () => {
+        STATE.order.status = 'SOLDE_PAYE';
+        showView('view-recu');
+        setActiveTab('tabCommandes');
+      });
+    };
+  }
+
+  // 10. Recommencer la Démo / Réinitialiser
+  function resetOrderDemo() {
     STATE.order.status = 'EN_ATTENTE_DEVIS';
     setRole('client', false);
     showView('view-decouvrir');
-    showLiveToast('Démonstration Réinitialisée', 'Prêt pour une nouvelle présentation jury.');
-  };
-
-  // 9. Navigation par Onglets
-  document.getElementById('tabDecouvrir').onclick = (e) => {
-    e.preventDefault();
     setActiveTab('tabDecouvrir');
-    showView('view-decouvrir');
-  };
-  document.getElementById('tabCommandes').onclick = (e) => {
-    e.preventDefault();
-    setActiveTab('tabCommandes');
-    showView(STATE.order.status === 'SOLDE_PAYE' ? 'view-recu' : 'view-suivi');
-  };
-  document.getElementById('tabMessages').onclick = (e) => {
-    e.preventDefault();
-    setActiveTab('tabMessages');
-    showLiveToast('Messagerie Atelier', 'Fil direct et sécurisé avec Maison Aïssatou');
-  };
-  document.getElementById('tabProfil').onclick = (e) => {
-    e.preventDefault();
-    setActiveTab('tabProfil');
-    showLiveToast('Profil Awa Diop', 'Carnet de mesures validé · Perspectives Atelier du Futur');
-  };
-
-  function setActiveTab(id) {
-    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    showLiveToast('Démonstration Réinitialisée', 'Prêt pour un nouveau parcours de test.');
   }
 
-  // 10. Mode Démo Automatique Guidée (Pour le pitch oral du concours)
+  const btnRestartDemo = document.getElementById('btnRestartDemo');
+  if (btnRestartDemo) btnRestartDemo.onclick = resetOrderDemo;
+
+  const btnResetTestMobile = document.getElementById('btnResetTestMobile');
+  if (btnResetTestMobile) btnResetTestMobile.onclick = resetOrderDemo;
+
+  // 11. Navigation par Onglets Principaux
+  const tabDecouvrir = document.getElementById('tabDecouvrir');
+  if (tabDecouvrir) {
+    tabDecouvrir.onclick = (e) => {
+      e.preventDefault();
+      setActiveTab('tabDecouvrir');
+      showView('view-decouvrir');
+    };
+  }
+
+  const tabCommandes = document.getElementById('tabCommandes');
+  if (tabCommandes) {
+    tabCommandes.onclick = (e) => {
+      e.preventDefault();
+      setActiveTab('tabCommandes');
+      if (STATE.currentRole === 'couturier') {
+        showView('view-atelier-dashboard');
+      } else {
+        if (STATE.order.status === 'SOLDE_PAYE') {
+          showView('view-recu');
+        } else if (STATE.order.status === 'DEVIS_RECU') {
+          showView('view-devis');
+        } else {
+          showView('view-suivi');
+        }
+      }
+    };
+  }
+
+  const tabMessages = document.getElementById('tabMessages');
+  if (tabMessages) {
+    tabMessages.onclick = (e) => {
+      e.preventDefault();
+      setActiveTab('tabMessages');
+      showView('view-messages');
+    };
+  }
+
+  const tabProfil = document.getElementById('tabProfil');
+  if (tabProfil) {
+    tabProfil.onclick = (e) => {
+      e.preventDefault();
+      setActiveTab('tabProfil');
+      showView('view-profil');
+    };
+  }
+
+  // 12. Boutons d'installation PWA
+  const btnInstallPwa = document.getElementById('btnInstallPwa');
+  if (btnInstallPwa) btnInstallPwa.onclick = triggerPwaInstall;
+
+  const btnInstallPwaMobile = document.getElementById('btnInstallPwaMobile');
+  if (btnInstallPwaMobile) btnInstallPwaMobile.onclick = triggerPwaInstall;
+
+  // 13. Mode Démo Automatique Guidée (Pitch Bureau Jury)
   const autoPlaySteps = [
-    { fn: () => { setRole('client', false); showView('view-decouvrir'); }, note: "1. Découverte de la Robe Nala (35 000 FCFA)", wait: 3500 },
+    { fn: () => { setRole('client', false); showView('view-decouvrir'); setActiveTab('tabDecouvrir'); }, note: "1. Découverte de la Robe Nala (35 000 FCFA)", wait: 3500 },
     { fn: () => { showView('view-mensurations'); }, note: "2. Mesures d'Awa Diop & Course à Mermoz", wait: 3000 },
     { fn: () => { setRole('couturier', false); }, note: "3. Tableau de bord Maison Aïssatou (3 demandes)", wait: 3200 },
-    { fn: () => { setRole('client', false); showView('view-devis'); }, note: "4. Devis officiel : 36 500 F (Acompte : 15 000 F)", wait: 3200 },
-    { fn: () => { showView('view-suivi'); }, note: "5. Suivi direct : Coupe & photo du bustier", wait: 3500 },
-    { fn: () => { showView('view-recu'); }, note: "6. Remise constatée & Reçu certifié Orange Money", wait: 3500 }
+    { fn: () => { setRole('client', false); showView('view-devis'); setActiveTab('tabCommandes'); }, note: "4. Devis officiel : 36 500 F (Acompte : 15 000 F)", wait: 3200 },
+    { fn: () => { showView('view-suivi'); setActiveTab('tabCommandes'); }, note: "5. Suivi direct : Coupe & photo du bustier", wait: 3500 },
+    { fn: () => { showView('view-recu'); setActiveTab('tabCommandes'); }, note: "6. Remise constatée & Reçu certifié Orange Money", wait: 3500 }
   ];
 
   let currentStepIdx = 0;
   const btnAutoPlay = document.getElementById('btnAutoPlay');
 
-  btnAutoPlay.onclick = () => {
-    if (STATE.autoPlayActive) {
-      clearTimeout(STATE.autoPlayTimer);
-      STATE.autoPlayActive = false;
-      btnAutoPlay.classList.remove('running');
-      btnAutoPlay.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">play_arrow</span><span>Mode Démo Guidée</span>';
-      showLiveToast('Mode Guidé Suspendu', 'Contrôle manuel réactivé.');
-    } else {
-      STATE.autoPlayActive = true;
-      btnAutoPlay.classList.add('running');
-      btnAutoPlay.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">pause</span><span>Arrêter le Mode Guidé</span>';
-      currentStepIdx = 0;
-      runNextAutoPlay();
-    }
-  };
+  if (btnAutoPlay) {
+    btnAutoPlay.onclick = () => {
+      if (STATE.autoPlayActive) {
+        clearTimeout(STATE.autoPlayTimer);
+        STATE.autoPlayActive = false;
+        btnAutoPlay.classList.remove('running');
+        btnAutoPlay.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">play_arrow</span><span>Mode Démo Guidée</span>';
+        showLiveToast('Mode Guidé Suspendu', 'Contrôle manuel réactivé.');
+      } else {
+        STATE.autoPlayActive = true;
+        btnAutoPlay.classList.add('running');
+        btnAutoPlay.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">pause</span><span>Arrêter le Mode Guidé</span>';
+        currentStepIdx = 0;
+        runNextAutoPlay();
+      }
+    };
+  }
 
   function runNextAutoPlay() {
     if (!STATE.autoPlayActive) return;
     if (currentStepIdx >= autoPlaySteps.length) {
-      btnAutoPlay.click(); // Stop
+      if (btnAutoPlay) btnAutoPlay.click();
       return;
     }
     const step = autoPlaySteps[currentStepIdx];
@@ -285,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
     STATE.autoPlayTimer = setTimeout(runNextAutoPlay, step.wait);
   }
 
-  // 11. Enregistrement du Service Worker PWA
+  // 14. Enregistrement du Service Worker PWA
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').then(() => {
       console.log('NIAWLOU PWA Service Worker actif');
